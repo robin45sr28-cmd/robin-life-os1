@@ -1,0 +1,16 @@
+ROBIN LIFE OS V12.0 — TRANSLATE & EXPLAIN
+
+AI Assistant now includes one-tap text actions:
+- Translate to English
+- Translate to Bangla
+- Explain in Bangla
+- Explain in English
+- Fix grammar & explain
+
+How to use:
+1. Open AI Assistant.
+2. Paste or type English/Bangla text into the question box.
+3. Tap the desired action. The app sends the task and text to the AI automatically.
+4. For full-quality answers, the hosted AI backend must be deployed, have OPENAI_API_KEY configured, and its URL saved in the app.
+
+If no backend is configured, the app can only provide limited local fallback replies. No AI can guarantee every translation or explanation is perfect; review important text. Never put API keys in the public website files.

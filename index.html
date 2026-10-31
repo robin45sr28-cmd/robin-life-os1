@@ -1,0 +1,864 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#101a16">
+<meta name="description" content="Robin Life OS - daily routine, learning, fitness and monthly progress tracker.">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<title>ROBIN · LIFE OS — V11.9 INSTANT AI</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1420;--panel:#142233;--panel2:#1a2c40;--line:#2a4055;--text:#eef4fb;--muted:#9eb0c3;--accent:#8fc5ff;--green:#52d6a0;--red:#ff8585}
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#0b1420,#101e2d 60%,#111a2b);color:var(--text);font:15px/1.45 system-ui,-apple-system,Segoe UI,Roboto,sans-serif;min-height:100vh}
+button,input,textarea{font:inherit}button{cursor:pointer;color:inherit}.app{max-width:850px;margin:auto;padding:16px 14px 90px}
+.hero{padding:22px;border:1px solid #38516a;border-radius:22px;background:linear-gradient(125deg,#142d3b,#263d58 65%,#3b3155);box-shadow:0 12px 35px #0003}
+.eyebrow{font-size:10px;letter-spacing:2px;color:#c2d6eb}.brand{font-size:29px;font-weight:850;letter-spacing:-1px;margin:3px 0}.brand span{color:#a6c6ed}.sub{font-size:12px;color:#d0ddec}
+.hero-bottom{display:flex;justify-content:space-between;align-items:end;margin-top:24px;gap:12px}.date{font-size:13px;color:#d5e2ef}.pct{font-size:34px;font-weight:800}.progress{height:8px;background:#ffffff28;border-radius:30px;overflow:hidden;margin-top:10px}.progress>i{display:block;height:100%;background:var(--accent);border-radius:30px;width:0;transition:width .2s}
+nav{display:flex;gap:7px;overflow:auto;padding:14px 0 12px;position:sticky;top:0;background:#0b1420ed;z-index:5}
+nav button,.btn,.day{border:1px solid var(--line);background:var(--panel);border-radius:11px;padding:10px 13px;font-size:12px;white-space:nowrap}
+nav button.active,.day.active{background:#24425d;border-color:#78b7ef;color:white;font-weight:700}
+.section{display:none}.section.active{display:block}.heading{font-size:19px;font-weight:750;margin:8px 0 3px}.muted{color:var(--muted);font-size:12px}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin:13px 0}.card{background:var(--panel);border:1px solid var(--line);border-radius:17px;padding:15px;min-width:0}.metric{font-size:27px;font-weight:800;letter-spacing:-1px;margin-top:3px}.tag{font-size:10px;color:#c4dcf3;background:#233c54;border-radius:30px;padding:5px 9px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}.bar{height:7px;background:#293b4d;border-radius:20px;overflow:hidden;margin-top:10px}.bar i{display:block;height:100%;background:linear-gradient(90deg,#64a9ed,#75dfb2);width:0;border-radius:20px}
+.task{display:flex;align-items:center;gap:11px;padding:11px 0;border-bottom:1px solid var(--line);font-size:13px}.task:last-child{border:0}.task input{width:19px;height:19px;accent-color:#72c6a6;flex-shrink:0}.task.done span{text-decoration:line-through;opacity:.52}
+.dayrow{display:flex;gap:5px;margin:13px 0}.day{flex:1;padding:9px 0;text-align:center;font-size:11px}
+.schedule{display:grid;grid-template-columns:105px 1fr;gap:10px;padding:12px 0;border-bottom:1px solid var(--line)}.schedule:last-child{border:0}.schedule time{font-size:11px;color:var(--muted);font-weight:650}.schedule label{font-size:13px}
+.small{font-size:11px;color:var(--muted)}.btn{margin-top:10px}.btn.primary{background:#284c6b;border-color:#527fa5}.btn.danger{border-color:#70464b;color:#ffb2b2}
+.monthhead{display:flex;justify-content:space-between;align-items:center;gap:8px;margin:14px 0}.monthhead strong{font-size:16px}.calendar{display:grid;grid-template-columns:repeat(7,1fr);gap:5px}.calday{min-height:55px;border:1px solid var(--line);border-radius:9px;background:var(--panel);padding:5px 2px;text-align:center;font-size:11px}.calday .num{font-weight:700}.calday .dot{font-size:10px;margin-top:4px;color:var(--muted)}.calday.full{background:#174a3c;border-color:#27775f}.calday.partial{background:#51421f;border-color:#88703a}.calday.missed{background:#422a32;border-color:#70404b}.calday.today{outline:2px solid var(--accent);outline-offset:1px}
+.field{width:100%;background:var(--panel2);border:1px solid var(--line);color:var(--text);padding:11px;border-radius:10px;margin-top:8px}.two{display:grid;grid-template-columns:1fr 1fr;gap:9px}.skilltitle{font-weight:700;font-size:14px}.note{width:100%;min-height:80px;resize:vertical}.list-editor{margin-top:12px;padding:12px;border:1px solid #405044;border-radius:13px;background:#0b1410}.edit-row{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;align-items:center;margin:7px 0}.edit-row .field{margin:0}.edit-row .btn{margin:0;padding:9px 11px}.editor-add{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:8px;margin-top:12px}.editor-add .field{margin:0}.editor-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.exercise-row{display:grid;grid-template-columns:minmax(0,1fr) 82px auto auto;gap:7px;align-items:center;margin:8px 0}.exercise-row .field{margin:0;min-width:0}.exercise-row .btn{margin:0;padding:9px 10px}.timer-display{font-size:34px;font-weight:850;letter-spacing:-1px;color:var(--accent);font-variant-numeric:tabular-nums}.timer-actions{display:flex;gap:7px;flex-wrap:wrap}.timer-actions .btn{margin-top:8px}.exercise-form{display:grid;grid-template-columns:minmax(0,1fr) 100px auto;gap:8px;margin-top:12px}.exercise-form .field,.exercise-form .btn{margin:0}.tracker-hero{display:grid;grid-template-columns:1fr auto;align-items:center;gap:10px}
+@media(max-width:560px){.exercise-row{grid-template-columns:minmax(0,1fr) 70px auto}.exercise-row .start-ex{grid-column:1/-1;width:100%}.exercise-form{grid-template-columns:1fr 90px}.exercise-form button{grid-column:1/-1}}
+footer{text-align:center;color:var(--muted);font-size:10px;padding:25px 0}
+@media(min-width:650px){.app{padding:24px 22px 90px}.grid.four{grid-template-columns:repeat(4,1fr)}.calday{min-height:68px}}
+
+/* Premium redesign layer */
+:root{color-scheme:dark;--bg:#080d12;--panel:#111a22;--panel2:#17232d;--line:#263640;--text:#f1f6f4;--muted:#93a59f;--accent:#c5f36a;--green:#a8e879;--red:#ff8585}
+*{box-sizing:border-box}body{background:radial-gradient(ellipse at 80% -10%,#203a32 0,transparent 34%),radial-gradient(ellipse at 0% 35%,#172b30 0,transparent 30%),#080d12;color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;letter-spacing:.005em}
+.app{max-width:1040px;padding:24px 22px 100px}.hero{position:relative;overflow:hidden;padding:26px 28px;border:1px solid #43584a;border-radius:25px;background:linear-gradient(115deg,#14241f 0%,#1b3029 48%,#263b30 100%);box-shadow:0 22px 65px #0007}
+.hero:after{content:"";position:absolute;width:270px;height:270px;border:1px solid #c5f36a22;border-radius:50%;right:-70px;top:-135px;box-shadow:0 0 0 28px #c5f36a08,0 0 0 58px #c5f36a06;pointer-events:none}
+.hero-top{display:flex;justify-content:space-between;align-items:center;gap:15px}.avatar{width:48px;height:48px;border-radius:16px;display:grid;place-items:center;background:linear-gradient(145deg,#d5fa83,#91c64c);color:#172018;font-size:21px;font-weight:900;box-shadow:0 7px 25px #b5e75b33}.eyebrow{font-size:10px;letter-spacing:2.2px;color:#b8cfbd;font-weight:750}.brand{font-size:30px;font-weight:900;letter-spacing:-1.5px;margin:5px 0}.brand span{color:var(--accent)}.sub{font-size:13px;color:#b8c9bf}.hero-bottom{position:relative;z-index:1;margin-top:30px;align-items:end}.date{font-size:14px;color:#e1ebe4;margin-top:5px}.pct{font-size:39px;font-weight:850;letter-spacing:-2px;color:var(--accent)}.progress{height:9px;background:#ffffff20;border-radius:30px;margin-top:12px}.progress>i{background:linear-gradient(90deg,#a5d957,#e0ff9a);box-shadow:0 0 16px #c5f36a55}
+nav{display:flex;gap:8px;overflow:auto;padding:17px 0 15px;position:sticky;top:0;background:#080d12eF;backdrop-filter:blur(16px);z-index:5}nav button,.btn,.day{border:1px solid #2b3a40;background:#111a22;border-radius:12px;padding:11px 15px;font-size:12px;color:#b6c4be;transition:.18s}nav button:hover,.btn:hover,.day:hover{border-color:#8cae61;color:#eff8e6}nav button.active,.day.active{background:#c5f36a;color:#172014;border-color:#c5f36a;font-weight:800;box-shadow:0 5px 18px #c5f36a20}
+.heading{font-size:22px;letter-spacing:-.65px;font-weight:820;margin:10px 0 5px}.muted{color:var(--muted);font-size:12px}.grid{gap:12px;margin:16px 0}.card{background:linear-gradient(145deg,#131e26,#101820);border:1px solid #263740;border-radius:19px;padding:17px;box-shadow:0 9px 26px #0002;min-width:0}.card strong,.card b{letter-spacing:-.15px}.metric{font-size:30px;font-weight:850;letter-spacing:-1.4px;margin-top:7px;color:#eff7ed}.tag{font-size:9px;letter-spacing:1px;font-weight:800;color:#d5f39e;background:#273827;border:1px solid #40563a;border-radius:30px;padding:6px 10px}.row{gap:12px}.bar{height:7px;background:#29383b;border-radius:20px;margin-top:12px}.bar i{background:linear-gradient(90deg,#8fca4e,#d3f77d);box-shadow:0 0 12px #b9ec6a30}
+.task{padding:12px 0;border-bottom:1px solid #26343a;font-size:13px;color:#dce6e0;gap:12px}.task input{width:18px;height:18px;accent-color:#c5f36a}.task.done span{opacity:.42}.dayrow{gap:7px;margin:16px 0}.day{padding:10px 0}.schedule{grid-template-columns:112px 1fr;padding:10px 0;border-color:#26343a}.schedule time{font-size:11px;color:#9eafa7}.schedule label{font-size:13px}
+.btn{margin-top:10px}.btn.primary{background:#c5f36a;border-color:#c5f36a;color:#172014;font-weight:800}.btn.danger{border-color:#71464b;color:#ffb2b2;background:#25181c}.monthhead{margin:16px 0}.monthhead strong{font-size:17px}.calendar{gap:6px}.calday{min-height:64px;border:1px solid #2a3b40;border-radius:12px;background:#111a22;color:#edf4ef;padding:8px 3px}.calday.full{background:#193c2e;border-color:#3b7955}.calday.partial{background:#41371e;border-color:#8a713b}.calday.missed{background:#35232a;border-color:#69414b}.calday.today{outline:2px solid var(--accent);outline-offset:2px}.calday .dot{font-size:9px}.field{background:#0c141a;border:1px solid #31434a;color:var(--text);padding:12px;border-radius:12px;outline:none}.field:focus{border-color:#a7d65c;box-shadow:0 0 0 3px #c5f36a18}.note{min-height:100px}.small{font-size:11px;color:var(--muted)}footer{color:#71847b;letter-spacing:.5px;padding:30px 0}
+.section{animation:fadein .22s ease}@keyframes fadein{from{opacity:.45;transform:translateY(4px)}to{opacity:1;transform:none}}
+@media(min-width:700px){.app{padding:28px 28px 70px}.grid.four{grid-template-columns:repeat(4,1fr)}.card{padding:19px}.calday{min-height:76px}nav button{padding:12px 18px}}
+@media(max-width:600px){.app{padding:12px 12px 92px}.hero{padding:20px;border-radius:21px}.brand{font-size:26px}.hero-bottom{margin-top:23px}.pct{font-size:34px}nav{position:fixed;left:10px;right:10px;bottom:9px;top:auto;padding:7px;gap:5px;border:1px solid #33433e;border-radius:17px;background:#101a1bee;box-shadow:0 12px 35px #0009;justify-content:space-between}nav button{flex:1;padding:12px 3px;font-size:10px;border:0;border-radius:11px}.grid{gap:8px}.card{padding:14px;border-radius:16px}.metric{font-size:25px}.heading{font-size:20px}.schedule{grid-template-columns:94px 1fr;gap:7px}.schedule time{font-size:10px}.calday{min-height:53px;border-radius:9px;padding:6px 1px}.monthhead .btn{font-size:10px;padding:9px 10px}}
+
+
+/* LIFE OS v3 — refined product polish */
+:root{--accent:#c8f17a;--panel:#121d24;--panel2:#18262d;--line:#2a3d42}
+html{scroll-behavior:smooth}body{background-image:radial-gradient(ellipse at 85% 0%,#30482b38,transparent 32%),radial-gradient(ellipse at 0% 55%,#1b3d3730,transparent 28%),linear-gradient(160deg,#070c10,#0b1318 55%,#0a1115)}
+.hero{background:linear-gradient(120deg,#13231d 0%,#1c3026 52%,#293b2b 100%);border-color:#536746}
+.card{backdrop-filter:blur(8px);transition:transform .18s ease,border-color .18s ease,box-shadow .18s ease}
+.card:hover{border-color:#60764c;box-shadow:0 13px 34px #0004}
+.heading{letter-spacing:-.8px}.section>.muted{max-width:620px;line-height:1.6}
+.schedule time{font-variant-numeric:tabular-nums}.schedule label{line-height:1.5}
+.field{font-variant-numeric:tabular-nums}.btn.primary{box-shadow:0 7px 20px #c5f36a1a}
+.stat-kicker{font-size:10px;text-transform:uppercase;letter-spacing:1.25px;color:#a7b8ad;font-weight:750}
+.sleep-panel{display:grid;grid-template-columns:1fr auto;align-items:center;gap:12px}.sleep-number{font-size:32px;letter-spacing:-1.5px;font-weight:850;color:var(--accent)}
+.sleep-icon,.water-icon{width:38px;height:38px;display:grid;place-items:center;border-radius:13px;background:#c5f36a17;border:1px solid #c5f36a30;font-size:19px}
+@media(max-width:600px){.sleep-panel{grid-template-columns:1fr auto}}
+
+
+/* V10.2 visual refinement: premium surfaces, accessible states, responsive navigation */
+:root{
+ --bg:#080f1b;--panel:#111d2d;--panel2:#17263a;--line:#293d56;
+ --text:#f3f7ff;--muted:#a8b7ca;--accent:#9bafff;--green:#5ce1b0;--red:#ff929e;
+ --shadow:0 16px 40px rgba(0,0,0,.22);
+}
+html{scroll-behavior:smooth}
+body{
+ background:
+  radial-gradient(ellipse at 8% 0%,rgba(83,113,207,.16),transparent 34rem),
+  radial-gradient(ellipse at 100% 16%,rgba(140,79,205,.12),transparent 30rem),
+  linear-gradient(160deg,#080f1b,#0c1727 58%,#0a1220);
+ background-attachment:fixed;
+}
+.app{max-width:1040px;padding:22px 18px 100px}
+.hero{position:relative;overflow:hidden;border:1px solid rgba(164,190,255,.25);
+ background:linear-gradient(125deg,rgba(22,47,70,.98),rgba(34,48,79,.97) 60%,rgba(64,43,91,.96));
+ box-shadow:0 22px 55px rgba(0,0,0,.28);border-radius:26px}
+.hero:after{content:"";position:absolute;right:-70px;top:-105px;width:260px;height:260px;border:1px solid #ffffff18;border-radius:50%;box-shadow:0 0 0 28px #ffffff08,0 0 0 58px #ffffff05;pointer-events:none}
+.brand{font-size:clamp(27px,4vw,36px);letter-spacing:-1.3px}
+.eyebrow{font-weight:750;letter-spacing:2.4px}
+nav{display:flex;gap:8px;overflow-x:auto;overscroll-behavior-x:contain;scrollbar-width:thin;
+ padding:10px;margin:16px 0 20px;border:1px solid rgba(155,180,220,.14);border-radius:18px;
+ background:rgba(13,25,41,.76);backdrop-filter:blur(16px);position:sticky;top:8px;z-index:10}
+nav button{flex:0 0 auto;border:1px solid transparent;border-radius:12px;padding:10px 13px;
+ background:transparent;color:var(--muted);font-weight:650;transition:background .18s,border-color .18s,transform .18s}
+nav button:hover{background:#ffffff0b;color:var(--text);transform:translateY(-1px)}
+nav button.active{color:#fff;background:linear-gradient(135deg,#354b85,#57427f);border-color:#a6b6ff55;box-shadow:0 5px 16px #0002}
+.section{animation:sectionIn .24s ease both}
+@keyframes sectionIn{from{opacity:.55;transform:translateY(5px)}to{opacity:1;transform:translateY(0)}}
+.card,.panel,.box,.stat,.task,.history-card{border-color:rgba(154,181,219,.17)}
+.card,.panel{box-shadow:0 8px 25px rgba(0,0,0,.12)}
+button,input,textarea,select{transition:border-color .18s,background .18s,box-shadow .18s}
+button{min-height:40px}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{
+ outline:2px solid #a9baff;outline-offset:3px
+}
+input,textarea,select{max-width:100%}
+button:active{transform:translateY(1px)}
+hr{border:0;border-top:1px solid var(--line)}
+.small,.muted,.sub{line-height:1.6}
+@media(max-width:700px){
+ .app{padding:12px 11px calc(94px + env(safe-area-inset-bottom))}
+ .hero{padding:20px;border-radius:21px}
+ .hero-bottom{margin-top:24px}
+ .progress{height:10px}
+ nav{position:sticky;top:5px;margin:12px -1px 17px;padding:7px;gap:6px;border-radius:15px}
+ nav button{padding:9px 11px;font-size:12px;min-height:38px}
+ .hero-bottom{align-items:flex-start;flex-wrap:wrap}
+}
+@media(max-width:420px){
+ .app{padding-left:9px;padding-right:9px}
+ .brand{font-size:26px}
+ .hero{padding:16px}
+ nav button{font-size:11px;padding:8px 9px}
+}
+@media(prefers-reduced-motion:reduce){
+ *,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}
+}
+
+
+/* V11 feature surfaces */
+.task-form{display:grid;gap:5px}
+.task-form .btn{margin-top:8px}
+.ai-chat{display:flex;flex-direction:column;gap:9px;max-height:330px;overflow:auto;padding:12px 0}
+.ai-bubble{max-width:95%;white-space:pre-wrap;overflow-wrap:anywhere;border:1px solid var(--line);background:var(--panel2);padding:11px 13px;border-radius:14px;line-height:1.55;font-size:13px}
+.ai-bubble.user{align-self:flex-end;background:#273b69;border-color:#536da7}
+.smart-task{display:flex;gap:10px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line)}
+.smart-task input[type=checkbox]{width:18px;height:18px;margin-top:3px;flex-shrink:0}
+.smart-task-main{flex:1;min-width:0;overflow-wrap:anywhere}
+.priority{font-size:10px;border-radius:20px;padding:4px 7px;background:#26364b;color:#d5e2f5}
+.priority.high{background:#512b3a;color:#ffd8df}.priority.low{background:#1b443d;color:#baf6e0}
+.smart-task.completed .smart-task-title{text-decoration:line-through;color:var(--muted)}
+.timer-display{font-size:clamp(42px,11vw,68px);font-weight:850;letter-spacing:-2px;font-variant-numeric:tabular-nums;margin:12px 0}
+#aiPrompt{resize:vertical}
+@media(max-width:520px){.two{gap:7px}.smart-task{gap:7px}.smart-task .btn{padding:7px 9px;font-size:11px}}
+
+
+/* V11.2 — progress-first sticky navigation, larger mobile layout, smoother assistant */
+html{scroll-behavior:smooth;scroll-padding-top:78px;-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{padding-top:0;overscroll-behavior-y:contain;-webkit-tap-highlight-color:transparent}
+nav{position:sticky!important;top:0!important;left:auto!important;right:auto!important;width:100%;margin:12px 0 16px!important;padding:10px max(12px,calc((100vw - 1100px)/2))!important;min-height:66px;display:flex;align-items:center;gap:8px;overflow-x:auto;overflow-y:hidden;white-space:nowrap;scrollbar-width:none;border:1px solid #c5f36a2b!important;border-radius:16px!important;background:rgba(8,13,18,.94)!important;backdrop-filter:blur(20px) saturate(145%);-webkit-backdrop-filter:blur(20px) saturate(145%);box-shadow:0 8px 28px #0005;z-index:1000;overscroll-behavior-x:contain}
+nav::-webkit-scrollbar{display:none}
+nav button{flex:0 0 auto;min-height:44px;padding:11px 15px;font-size:13px;border-radius:13px;touch-action:pan-x;scroll-snap-align:start}
+nav button.active{background:linear-gradient(135deg,#c5f36a,#a5d957)!important;color:#172014!important;box-shadow:0 4px 16px #c5f36224!important}
+.app{padding-top:18px;padding-bottom:36px}
+.section.active{animation:sectionIn .18s ease-out both}
+.card,button,.field{transform:translateZ(0)}
+button,.btn,input,textarea,select{touch-action:manipulation}
+.field{font-size:16px;min-height:48px;padding:12px 13px;border-radius:13px}
+textarea.field{min-height:100px;line-height:1.55}
+.btn{min-height:46px;padding:12px 15px;font-size:14px}
+.ai-chat{display:flex;flex-direction:column;gap:10px;max-height:min(52vh,460px);overflow-y:auto;overscroll-behavior:contain;padding:12px;margin:12px 0;border:1px solid #2b3b36;border-radius:16px;background:#0b1211;scroll-behavior:smooth}
+.ai-bubble{max-width:94%;white-space:pre-wrap;overflow-wrap:anywhere;padding:12px 14px;border:1px solid #30433a;border-radius:14px 14px 14px 4px;background:#17231c;color:#edf6eb;font-size:14px;line-height:1.65}
+.ai-bubble.user{align-self:flex-end;background:#293d21;border-color:#526a3a;border-radius:14px 14px 4px 14px}
+@media(max-width:700px){
+ body{padding-top:0}
+ .app{padding:12px 12px calc(26px + env(safe-area-inset-bottom))!important}
+ nav{min-height:64px;padding:8px 10px!important;gap:7px;margin:10px 0 15px!important;border-radius:14px!important}
+ nav button{font-size:13px;padding:11px 14px;min-height:46px}
+ .hero{padding:20px;border-radius:21px}
+ .hero-bottom{margin-top:24px}
+ .progress{height:10px}
+ .brand{font-size:clamp(27px,7vw,33px)}
+ .heading{font-size:22px;line-height:1.25}
+ .muted,.small{font-size:13px}
+ .grid{gap:10px}
+ .card{padding:17px;border-radius:17px}
+ .metric{font-size:30px}
+ .btn{font-size:15px;min-height:49px}
+ .field{min-height:50px}
+ .schedule{grid-template-columns:104px minmax(0,1fr)}
+ .task{font-size:14px;gap:12px;padding:13px 0}
+ .task input{width:22px;height:22px}
+ .day{font-size:13px;min-height:44px}
+ .schedule{grid-template-columns:100px minmax(0,1fr);gap:9px}
+ .schedule label{font-size:14px}
+ .calday{min-height:58px;font-size:12px;padding:7px 2px}
+ .timer-display{font-size:clamp(38px,12vw,54px)}
+ .two{gap:8px}
+ .two .btn{min-width:0;white-space:normal}
+ .row{flex-wrap:wrap}
+ .row>.field{max-width:100%}
+ #aiChatForm .btn{min-height:50px;font-size:15px}
+ #aiPrompt{min-height:100px}
+ footer{padding-bottom:18px}
+}
+@media(max-width:390px){
+ .app{padding-left:9px!important;padding-right:9px!important}
+ .hero{padding:16px}
+ nav button{font-size:13px;padding:11px 13px;min-height:48px}
+ .heading{font-size:23px}
+ .card{padding:14px}
+ .grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .card{padding:12px}
+ .metric{font-size:26px}
+ .calendar{gap:3px}
+ .calday{min-height:49px;font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.section.active{animation:none}}
+
+
+/* V11.4 — calm, simple, touch-friendly usability layer. Existing features and data remain intact. */
+:root{--accent:#b7ed72;--line:#2b3b42;--panel:#121d23;--panel2:#18262d;--muted:#a6b6b0;--focus-ring:#c8f58c}
+body{background:radial-gradient(ellipse at 85% -8%,rgba(92,140,99,.18),transparent 34rem),radial-gradient(ellipse at 0% 24%,rgba(67,105,131,.14),transparent 28rem),#0a1013}
+.app{max-width:1080px;padding-left:clamp(12px,3vw,28px);padding-right:clamp(12px,3vw,28px)}
+.hero{background:linear-gradient(130deg,#172a25 0%,#1d332b 56%,#293d32 100%);border-color:#4a6251;border-radius:26px;padding:clamp(18px,3vw,30px);box-shadow:0 18px 48px #0004}
+.avatar{flex-shrink:0;border-radius:17px}
+nav{top:0!important;margin-top:12px!important;margin-bottom:20px!important;min-height:62px;padding:8px!important;background:rgba(11,18,20,.96)!important;border-color:#34453d!important;border-radius:17px!important;box-shadow:0 9px 28px #0005!important;scroll-snap-type:x proximity}
+nav button{min-height:46px!important;padding:11px 15px!important;font-size:13px!important;border:1px solid transparent!important;color:#c0cdc5!important}
+nav button.active{background:linear-gradient(135deg,#c5f36a,#a6dc5b)!important;color:#182014!important;border-color:#d6ff9a!important;box-shadow:0 4px 13px #b7ed7225!important}
+.section.active{animation:sectionIn .2s ease-out both}
+.heading{font-size:clamp(22px,3vw,27px);line-height:1.2;letter-spacing:-.7px;margin:12px 0 6px}
+.card{border-radius:19px;border-color:#2b3b42;background:linear-gradient(145deg,#141f24,#10191e);box-shadow:0 8px 23px #0002;padding:clamp(14px,2vw,20px)}
+.grid{gap:12px}.metric{font-size:clamp(25px,4vw,32px)}
+.btn{border-radius:13px;min-height:46px;padding:11px 15px;font-size:14px;font-weight:650}
+.btn.primary{background:linear-gradient(135deg,#c5f36a,#a9df5d);border-color:#c5f36a;color:#182014;box-shadow:0 5px 14px #b7ed7218}
+.field{border-radius:13px;background:#17242a;border-color:#34474b;min-height:49px;padding:12px 14px;font-size:16px;color:#f3f8f4}
+.field::placeholder{color:#84968f;opacity:1}
+.task,.smart-task{min-height:48px}
+.quick-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:10px;margin:16px 0 18px}
+.quick-action{display:flex;align-items:center;gap:11px;min-width:0;min-height:76px;text-align:left;padding:13px;border-radius:17px;border:1px solid #30423b;background:linear-gradient(145deg,#182721,#121d1d);color:var(--text);transition:transform .18s,border-color .18s,background .18s}
+.quick-action:hover{transform:translateY(-2px);border-color:#91b66a;background:#1a2a22}
+.quick-action>span:nth-child(2){display:flex;flex-direction:column;gap:3px;min-width:0}.quick-action b{font-size:14px}.quick-action small{font-size:11px;color:#a6b7ac;white-space:normal}.quick-icon{display:grid;place-items:center;flex:0 0 38px;width:38px;height:38px;border-radius:12px;background:#c5f36a18;color:#d0f78e;font-size:19px}.quick-arrow{margin-left:auto;color:#91aa91;font-size:15px;align-self:flex-start}
+.ai-quick{border-color:#5b7046;background:linear-gradient(140deg,#233522,#17251e)}.ai-quick .quick-icon{background:#c5f36a;color:#1a2714}
+.prompt-suggestions{display:flex;gap:8px;overflow-x:auto;padding:2px 1px 9px;margin:9px 0 4px;scrollbar-width:thin;overscroll-behavior-x:contain}
+.prompt-chip{flex:0 0 auto;min-height:40px;padding:9px 12px;border:1px solid #3a4b40;border-radius:999px;background:#17241e;color:#dcebd5;font-size:12px;font-weight:650;white-space:nowrap}
+.prompt-chip:hover{border-color:#b7ed72;background:#24351e}
+.translator-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px;margin:9px 0 8px}.translator-btn{min-width:0;white-space:normal;line-height:1.3;background:#172722;border-color:#3c5948;color:#e3f2e5}.translator-btn:hover{border-color:#b7ed72;background:#233a2a}.translator-btn:last-child{grid-column:1/-1}
+.ai-chat{max-height:min(55vh,520px);min-height:160px;background:#0c1412;border-color:#30433a}
+#aiPrompt{min-height:110px;resize:vertical}
+#aiChatForm button{margin-top:9px}
+input[type=checkbox]{accent-color:#b7ed72}
+button:focus-visible,input:focus-visible,textarea:focus-visible,select:focus-visible{outline:3px solid var(--focus-ring)!important;outline-offset:2px!important}
+button:disabled{opacity:.45;cursor:not-allowed}
+@media(max-width:760px){
+ .app{padding-top:12px;padding-bottom:calc(22px + env(safe-area-inset-bottom))}
+ .hero{padding:19px;border-radius:22px}.hero-bottom{margin-top:22px}
+ nav{position:sticky!important;top:0!important;min-height:62px!important;margin:10px 0 17px!important;padding:7px!important;gap:6px!important;border-radius:15px!important}
+ nav button{font-size:13px!important;min-height:46px!important;padding:11px 13px!important}
+ .quick-actions{grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:13px 0 15px}
+ .quick-action{min-height:72px;padding:11px;gap:9px}.quick-action b{font-size:13px}.quick-action small{font-size:11px}.quick-icon{width:36px;height:36px;flex-basis:36px}
+ .grid{gap:9px;margin:12px 0}.card{padding:15px;border-radius:17px}
+ .row{gap:9px}.row>.row{flex-wrap:wrap}
+ .heading{font-size:23px}.muted,.small{font-size:13px}
+ .btn{min-height:48px;padding:12px 14px;font-size:14px}
+ .field{min-height:50px;font-size:16px}
+ .ai-chat{max-height:48vh;min-height:190px;padding:10px}
+ .ai-bubble{font-size:15px;padding:13px 14px;line-height:1.65}
+ .prompt-chip{min-height:42px;font-size:13px}
+ .translator-actions{gap:8px}.translator-btn{min-height:48px;font-size:13px;padding:11px 10px}
+}
+@media(max-width:390px){
+ .app{padding-left:10px;padding-right:10px}
+ .hero{padding:16px}.avatar{width:42px;height:42px}
+ .quick-action{min-height:69px;padding:9px;gap:7px}.quick-icon{width:32px;height:32px;flex-basis:32px;font-size:17px}.quick-action b{font-size:12px}.quick-action small{font-size:10px}
+ .grid.four{grid-template-columns:repeat(2,minmax(0,1fr))}
+ nav button{padding:10px 12px!important}
+}
+@media(prefers-reduced-motion:reduce){.quick-action,.section.active{animation:none!important;transition:none!important}}
+
+
+/* V11.5 — slideable navigation with visible next/previous controls, touch-friendly on phones. */
+.nav-slider{position:sticky;top:0;z-index:1000;display:flex;align-items:center;gap:6px;margin:12px 0 18px;padding:6px;border:1px solid #34453d;border-radius:17px;background:rgba(11,18,20,.97);backdrop-filter:blur(18px) saturate(140%);-webkit-backdrop-filter:blur(18px) saturate(140%);box-shadow:0 9px 28px #0005;min-width:0}
+.nav-slider nav{position:static!important;top:auto!important;left:auto!important;right:auto!important;z-index:auto!important;flex:1 1 auto;min-width:0;width:auto!important;margin:0!important;padding:2px!important;min-height:48px!important;display:flex;align-items:center;gap:7px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none;white-space:nowrap;background:transparent!important;border:0!important;border-radius:11px!important;box-shadow:none!important;backdrop-filter:none!important;-webkit-backdrop-filter:none!important;scroll-snap-type:x proximity;overscroll-behavior-x:contain;scroll-behavior:smooth;touch-action:pan-x}
+.nav-slider nav::-webkit-scrollbar{display:none}
+.nav-slider nav button{flex:0 0 auto!important;scroll-snap-align:center}
+.nav-arrow{display:grid;place-items:center;flex:0 0 36px;width:36px;min-width:36px;height:42px;min-height:42px;padding:0!important;border:1px solid #425747!important;border-radius:12px!important;background:#19271e!important;color:#d8f6b6!important;font-size:25px!important;line-height:1;font-weight:700;cursor:pointer;touch-action:manipulation;transition:background .18s,transform .18s}
+.nav-arrow:active{transform:scale(.94);background:#2b422c!important}
+.nav-arrow:disabled{opacity:.3;cursor:default}
+@media(max-width:700px){.nav-slider{top:0;margin:9px 0 15px;padding:5px;gap:4px;border-radius:15px}.nav-slider nav{min-height:49px!important;gap:5px}.nav-slider nav button{min-height:44px!important;padding:10px 12px!important;font-size:13px!important}.nav-arrow{flex-basis:32px;width:32px;min-width:32px;height:40px;min-height:40px;font-size:23px!important;border-radius:10px!important}}
+@media(max-width:390px){.nav-slider{padding:4px}.nav-slider nav button{padding:10px 11px!important;font-size:12px!important}.nav-arrow{flex-basis:29px;width:29px;min-width:29px;height:38px;min-height:38px}}
+
+
+/* V11.6 Smart usability layer: quick find, next-step coaching, larger touch targets. V11.9 instant AI question chips. */
+.sr-only{position:absolute!important;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.smart-tools,.smart-nudge{border-color:#34483a;background:linear-gradient(145deg,rgba(24,39,30,.98),rgba(15,24,23,.98));box-shadow:0 8px 24px #0002}
+.smart-tools-head{margin-bottom:11px}.smart-find-results{display:grid;gap:7px;margin-top:9px}
+.smart-result{display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;min-height:46px;text-align:left;padding:10px 12px;border:1px solid #304238;border-radius:12px;background:#101b17;color:var(--text);font-size:14px}
+.smart-result span{min-width:0;overflow-wrap:anywhere}.smart-result small{color:#a4b8a6;flex:0 0 auto}.smart-result:active{transform:scale(.99);border-color:#c5f36a}
+.smart-nudge{background:radial-gradient(ellipse at top right,#c5f36a13,transparent 58%),linear-gradient(145deg,#192820,#111b1b)}
+.nudge-icon{display:grid;place-items:center;width:40px;height:40px;border-radius:14px;background:#c5f36a;color:#182014;font-size:21px}
+.smart-nudge-actions{justify-content:flex-start;flex-wrap:wrap}.smart-nudge-actions .btn{margin:0}
+@media(max-width:760px){.smart-tools,.smart-nudge{padding:15px}.smart-result{min-height:50px;font-size:15px}.smart-tools .field{font-size:16px;min-height:52px}.smart-nudge-actions .btn{flex:1 1 135px}}
+@media(prefers-reduced-motion:no-preference){.smart-nudge{animation:softAppear .35s ease-out both}.smart-result{transition:border-color .15s,background .15s,transform .15s}}
+@keyframes softAppear{from{opacity:.7;transform:translateY(4px)}to{opacity:1;transform:translateY(0)}}
+
+.ai-bubble pre{white-space:pre;overflow:auto;max-width:100%;padding:12px;border-radius:10px;background:#050a09;border:1px solid #30433a;font-size:.9em;line-height:1.5}
+.ai-bubble code{font-family:ui-monospace,SFMono-Regular,Consolas,monospace;font-size:.95em}
+.ai-bubble p{margin:.45em 0}.ai-bubble ul,.ai-bubble ol{padding-left:1.35rem}.ai-bubble .ai-code-label{font-size:.75rem;opacity:.8;margin-bottom:5px}.ai-bubble .ai-inline-code{background:#15211d;padding:2px 5px;border-radius:5px}
+.ai-thinking{opacity:.8;font-style:italic}.ai-bubble button.copy-code{margin:5px 0 0;padding:5px 9px;font-size:.8rem}
+</style>
+</head>
+<body>
+<div class="app">
+<header class="hero">
+ <div class="hero-top"><div><div class="eyebrow">YOUR PERSONAL COMMAND CENTER</div><div class="brand">ROBIN <span>LIFE OS</span></div><div class="sub">Build your day. Shape your future.</div></div><div class="avatar">R</div></div>
+ <div class="hero-bottom"><div><div class="eyebrow">TODAY AT A GLANCE</div><div id="todayDate" class="date"></div></div><div style="text-align:right"><div class="eyebrow">DAILY PROGRESS</div><div id="heroPct" class="pct">0%</div></div></div>
+ <div class="progress"><i id="heroBar"></i></div>
+</header>
+<div class="nav-slider" aria-label="Page navigation"><button class="nav-arrow nav-prev" type="button" aria-label="Scroll navigation left" title="Previous options">‹</button><nav aria-label="Main navigation">
+ <button class="active" data-tab="dashboard">⌂ Dashboard</button><button data-tab="routine">◷ Routine</button><button data-tab="study">📚 Study</button><button data-tab="skills">✦ Skills</button><button data-tab="fitness">♥ Fitness</button><button data-tab="recovery">💧 Water & Sleep</button><button data-tab="monthly">▦ Monthly report</button><button data-tab="tasks">✓ Smart Tasks</button><button data-tab="focus">◉ Focus</button><button data-tab="assistant">✧ AI Assistant</button><button data-tab="settings">⚙ Backup & Settings</button>
+</nav><button class="nav-arrow nav-next" type="button" aria-label="Scroll navigation right" title="Next options">›</button></div>
+<section id="dashboard" class="section active">
+ <div class="row"><div><div class="heading">Welcome back, Robin</div><div class="muted">Stay consistent. Your next level starts today.</div></div><span class="tag" id="dayType">COLLEGE DAY</span></div>
+ <div class="quick-actions" aria-label="Quick actions">
+  <button class="quick-action" type="button" data-goto="routine"><span class="quick-icon">◷</span><span><b>Routine</b><small>Plan your day</small></span><span class="quick-arrow">↗</span></button>
+  <button class="quick-action" type="button" data-goto="study"><span class="quick-icon">📚</span><span><b>Study</b><small>Start learning</small></span><span class="quick-arrow">↗</span></button>
+  <button class="quick-action" type="button" data-goto="focus"><span class="quick-icon">◉</span><span><b>Focus</b><small>Deep work</small></span><span class="quick-arrow">↗</span></button>
+  <button class="quick-action ai-quick" type="button" data-goto="assistant"><span class="quick-icon">✧</span><span><b>Ask Robin AI</b><small>Get help anytime</small></span><span class="quick-arrow">↗</span></button>
+ </div>
+ <div class="smart-tools card" aria-label="Smart app tools">
+  <div class="row smart-tools-head"><div><strong>⌕ Smart Find</strong><div class="small">Find a page or a task quickly</div></div><span class="tag">QUICK JUMP</span></div>
+  <label class="sr-only" for="smartFindInput">Search app pages and tasks</label>
+  <input id="smartFindInput" class="field" type="search" autocomplete="off" placeholder="Try: study, sleep, AI, or task name…" aria-controls="smartFindResults">
+  <div id="smartFindResults" class="smart-find-results" aria-live="polite"><div class="small">Type to search all sections and your saved tasks. Tip: press Ctrl/⌘ + K to search.</div></div>
+ </div>
+ <div class="smart-nudge card" style="margin-top:12px">
+  <div class="row"><div><div class="eyebrow">YOUR NEXT BEST STEP</div><strong id="smartNudgeTitle">Make today count</strong></div><span class="nudge-icon" aria-hidden="true">✦</span></div>
+  <p id="smartNudgeText" class="muted" style="margin:9px 0 12px">A small, clear action is the easiest way to build momentum.</p>
+  <div class="row smart-nudge-actions"><button type="button" class="btn primary" id="smartNudgeGo">Start now →</button><button type="button" class="btn" data-goto="assistant">Ask Robin AI</button></div>
+ </div>
+ <div class="grid four">
+  <div class="card"><div class="muted">Tasks completed</div><div class="metric" id="taskCount">0/0</div></div>
+  <div class="card"><div class="muted">Daily score</div><div class="metric" id="score">0%</div></div>
+  <div class="card"><div class="muted">Fully completed days</div><div class="metric" id="monthFull">0</div></div>
+  <div class="card"><div class="muted">Monthly average</div><div class="metric" id="monthAvg">0%</div></div>
+ </div>
+ <div class="card"><div class="row"><strong>Today's priority checklist</strong><div class="row"><button class="btn" style="margin:0" data-goto="routine">All tasks →</button><button class="btn" style="margin:0" id="dashboardCustomize">✎ Customize</button></div></div><div id="quickTasks"></div><div class="small" style="margin-top:7px">Edit dashboard priorities from the Routine page; changes here follow your daily routine.</div></div>
+ <div class="card" style="margin-top:12px"><div class="row"><strong>Focus area progress</strong><span class="tag">TODAY</span></div><div class="grid" style="margin-bottom:0"><div class="card focus-card"><div>🎓</div><b>Academic study</b><div class="row small"><span id="focusAcademicText">0/0 tasks</span><strong id="focusAcademicPct">0%</strong></div><div class="bar"><i id="focusAcademicBar"></i></div></div><div class="card focus-card"><div>🎬</div><b>Video editing</b><div class="row small"><span id="focusEditingText">0/0 items</span><strong id="focusEditingPct">0%</strong></div><div class="bar"><i id="focusEditingBar"></i></div></div><div class="card focus-card"><div>💪</div><b>Fitness</b><div class="row small"><span id="focusFitnessText">0/0 tasks</span><strong id="focusFitnessPct">0%</strong></div><div class="bar"><i id="focusFitnessBar"></i></div></div><div class="card focus-card"><div>🌙</div><b>Recovery</b><div class="row small"><span id="focusRecoveryText">Sleep not logged</span><strong id="focusRecoveryPct">0%</strong></div><div class="bar"><i id="focusRecoveryBar"></i></div></div></div></div>
+</section>
+<section id="routine" class="section">
+ <div class="heading">Your weekly rhythm</div><div class="muted">A clear plan for focused work, learning and recovery.</div>
+ <div class="dayrow" id="dayPicker"></div>
+ <div class="card"><div class="row"><div><strong id="routineDay">Monday</strong><div class="small" id="routineType"></div></div><strong id="routinePct">0%</strong></div><div class="bar"><i id="routineBar"></i></div><div id="schedule"></div><button class="btn" id="customizeRoutine">✎ Customize this day's routine</button><div id="routineEditor"></div><button class="btn danger" id="resetDay">Reset this date</button></div>
+</section>
+<section id="study" class="section">
+ <div class="heading">Study routine planner</div><div class="muted">Build your own weekly study timetable. Set any session length you prefer.</div>
+ <div class="dayrow" id="studyDayPicker"></div>
+ <div class="card"><div class="row"><div><strong id="studyDayTitle">Monday</strong><div class="small">Add subjects and choose your preferred start time.</div></div><span class="tag">CUSTOM DURATION</span></div><div class="small" style="margin-top:10px">Study timer runs in the app; sound alert may depend on your phone/browser settings.</div><div id="studySessions" style="margin-top:10px"></div><button class="btn primary" id="addStudySession">＋ Add study session</button><div class="small" id="studyStatus" style="margin-top:8px">Your study plan saves automatically on this device.</div><div class="timer-panel" style="margin-top:14px;padding:16px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.035);text-align:center">
+<div class="small" style="letter-spacing:.12em;text-transform:uppercase">STUDY COUNTDOWN</div>
+<div id="studyTimerStatus" role="timer" aria-live="polite" style="font-size:clamp(24px,6vw,34px);font-weight:800;letter-spacing:.04em;margin-top:8px;font-variant-numeric:tabular-nums">00:00:00</div>
+<div class="small" id="studyTimerHint" style="margin-top:6px">Choose a session and press Start timer. Sound alert depends on your phone/browser settings.</div>
+<div class="row" style="justify-content:center;gap:8px;margin-top:12px;flex-wrap:wrap">
+<button class="btn primary" id="studyTimerStart" style="margin:0">▶ Start</button>
+<button class="btn" id="studyTimerPause" style="margin:0" disabled>Ⅱ Pause</button>
+<button class="btn" id="studyTimerReset" style="margin:0" disabled>↻ Reset</button>
+</div>
+</div></div>
+<div class="timer-panel" style="margin-top:12px;padding:16px;border:1px solid var(--line);border-radius:14px;background:rgba(255,255,255,.035);text-align:center">
+<div class="small" style="letter-spacing:.12em;text-transform:uppercase">STUDY STOPWATCH</div>
+<div id="studyStopwatchStatus" role="timer" aria-live="off" style="font-size:clamp(24px,6vw,34px);font-weight:800;letter-spacing:.04em;margin-top:8px;font-variant-numeric:tabular-nums">00:00:00</div>
+<div class="row" style="justify-content:center;gap:8px;margin-top:10px">
+<button class="btn primary" id="studyStopwatchStart" style="margin:0">▶ Start</button>
+<button class="btn" id="studyStopwatchPause" style="margin:0">Ⅱ Pause</button>
+<button class="btn danger" id="studyStopwatchReset" style="margin:0">↻ Reset</button>
+</div>
+<div class="small" style="margin-top:7px">Counts your actual study time upward. Saved if you refresh the app.</div>
+</div>
+ <div class="card" style="margin-top:12px"><strong>How it works</strong><p class="muted" style="margin-bottom:0">Choose a day, write a subject or topic, set a start time and choose the session duration. Your plan is saved separately for each day.</p></div>
+</section>
+
+<section id="skills" class="section">
+ <div class="heading">Creative skill studio</div><div class="muted">Turn focused practice into professional-level skills.</div>
+ <div class="card" style="margin-top:12px"><div class="row"><div><div class="skilltitle">🎞️ Adobe After Effects</div><div class="small">Motion design · Animation · VFX</div></div><span class="tag">ADVANCED</span></div><div class="bar"><i id="aeBar"></i></div><div class="row small" style="margin-top:6px"><span id="aeCount">0/7 topics</span><span id="aePct">0%</span></div><div id="aeTasks"></div><button class="btn" onclick="manageList('ae')">✎ Customize topics</button><div id="aeEditor"></div></div>
+ <div class="card" style="margin-top:12px"><div class="row"><div><div class="skilltitle">🎥 Adobe Premiere Pro</div><div class="small">Editing · Color · Sound</div></div><span class="tag">ADVANCED</span></div><div class="bar"><i id="prBar"></i></div><div class="row small" style="margin-top:6px"><span id="prCount">0/7 topics</span><span id="prPct">0%</span></div><div id="prTasks"></div><button class="btn" onclick="manageList('pr')">✎ Customize topics</button><div id="prEditor"></div></div>
+ <div class="card" style="margin-top:12px"><strong>Project of the week</strong><input class="field" id="projectName" placeholder="Your project name"><button class="btn primary" id="saveProject">Save project</button><div class="small" id="projectStatus"></div></div>
+</section>
+<section id="fitness" class="section">
+ <div class="heading">Fitness & wellbeing</div><div class="muted">Train with purpose. Recover with intention.</div>
+ <div class="grid"><div class="card"><div class="muted">Workout target</div><div class="metric">60–90</div><div class="small">Minutes on training days</div></div><div class="card"><div class="muted">Weekly target</div><div class="metric">5–6</div><div class="small">Training days, with recovery</div></div></div>
+ <div class="card" style="margin-top:12px"><div class="row"><div><strong>⏱️ Custom exercise timer</strong><div class="muted">Write each exercise and set how many minutes you want to do it.</div></div><span class="tag">FITNESS</span></div>
+ <div class="card" style="margin-top:12px;background:#0b1410"><div class="small">ACTIVE TIMER</div><div class="timer-display" id="fitnessTimerDisplay">00:00</div><div class="small" id="fitnessTimerLabel">Choose an exercise and press Start.</div><div class="timer-actions"><button class="btn primary" id="fitnessPause" disabled>Pause</button><button class="btn" id="fitnessResume" disabled>Resume</button><button class="btn danger" id="fitnessReset" disabled>Reset</button></div><div class="small" id="fitnessTimerStatus" style="margin-top:7px">Timer runs while the app is open or in the background; keep the app allowed in battery settings.</div></div>
+ <div id="exerciseList"></div><div class="exercise-form"><input class="field" id="exerciseName" placeholder="Exercise name (e.g. Push-ups)"><input class="field" id="exerciseMinutes" type="number" min="1" max="600" value="10" aria-label="Minutes"><button class="btn primary" id="addExercise">＋ Add</button></div><div class="small" style="margin-top:8px">You can edit or delete each exercise and set a different duration in minutes.</div></div>
+ <div class="card" style="margin-top:12px"><strong>Workout checklist</strong><div class="muted">Adapt intensity to your fitness level. Recovery days can be light mobility or walking.</div><div id="workoutTasks"></div><button class="btn" onclick="manageList('workouts')">✎ Customize workout tasks</button><div id="workoutsEditor"></div></div>
+ <div class="card" style="margin-top:12px"><strong>Healthy habits</strong><div id="fitnessHabits"></div><button class="btn" onclick="manageList('habits')">✎ Customize habits</button><div id="habitsEditor"></div></div>
+ <div class="card" style="margin-top:12px"><strong>Workout notes</strong><textarea class="field note" id="workoutNote" placeholder="Sets, reps, exercise, energy, progress..."></textarea><button class="btn primary" id="saveNote">Save notes</button><div class="small" id="noteStatus"></div></div>
+</section>
+<section id="recovery" class="section">
+ <div class="heading">Daily water & sleep tracker</div><div class="muted">Track hydration and sleep separately from your workout plan.</div>
+ <div class="card" style="margin-top:12px"><strong>💧 Daily water intake</strong><div class="muted">Record how much water you drink today and set your personal daily target.</div><div class="grid" style="margin:10px 0 4px"><div><label class="small" for="waterAmount">Water consumed (litres)</label><input class="field" id="waterAmount" type="number" min="0" max="15" step="0.1" inputmode="decimal" placeholder="e.g. 1.5"></div><div><label class="small" for="waterGoal">Daily target (litres)</label><input class="field" id="waterGoal" type="number" min="0.5" max="10" step="0.1" inputmode="decimal" value="2.5"></div></div><button class="btn primary" id="saveWater">Save water intake</button><div class="row" style="margin-top:14px"><strong id="waterSummary">0.0 L / 2.5 L</strong><span class="tag" id="waterPercent">0%</span></div><div class="bar"><i id="waterBar"></i></div><div class="small" id="waterStatus" style="margin-top:7px">Enter your water intake for today.</div></div>
+ <div class="card" style="margin-top:12px" id="sleepTracker"><div class="row"><div><div class="row" style="justify-content:flex-start"><span class="sleep-icon">🌙</span><strong>Daily sleep tracker</strong></div><div class="muted" style="margin-top:7px">Record how many hours you slept last night.</div></div><span class="tag">RECOVERY</span></div><div class="sleep-panel" style="margin-top:12px"><div><label class="small" for="sleepHours">Hours slept</label><input class="field" id="sleepHours" type="number" min="0" max="24" step="0.25" inputmode="decimal" placeholder="e.g. 7.5"></div><div style="text-align:right"><div class="stat-kicker">Today's sleep</div><div class="sleep-number" id="sleepSummary">— h</div></div></div><div class="two" style="margin-top:8px"><div><label class="small" for="sleepGoal">Sleep goal (hours)</label><input class="field" id="sleepGoal" type="number" min="1" max="16" step="0.25" value="8"></div><div style="display:flex;align-items:end"><button class="btn primary" id="saveSleep" style="width:100%;margin-top:8px">Save sleep</button></div></div><div class="card" style="margin-top:12px;background:#101d2b;border-color:#38516a"><div class="row"><div><div class="row" style="justify-content:flex-start"><span class="sleep-icon">⏱️</span><strong>Sleep hour timer</strong></div><div class="muted" style="margin-top:5px">Tap when you go to sleep, then stop when you wake up.</div></div><div class="sleep-number" id="sleepTimerDisplay" style="font-size:25px">00:00:00</div></div><div class="two" style="margin-top:12px"><button class="btn primary" id="sleepStart">🌙 Start sleep</button><button class="btn" id="sleepStop" disabled>☀️ Stop & save</button></div><div class="small" id="sleepTimerStatus" style="margin-top:8px">Timer is not running.</div></div><div class="bar"><i id="sleepBar"></i></div><div class="small" id="sleepStatus" style="margin-top:7px">Add your sleep duration to track recovery.</div></div>
+</section>
+
+<section id="tasks" class="section">
+ <div class="heading">Smart task manager</div><div class="muted">Capture tasks, set priorities and check them off. Tasks are saved on this device.</div>
+ <div class="card" style="margin-top:12px">
+  <form id="smartTaskForm" class="task-form">
+   <label class="small" for="smartTaskTitle">Task</label><input class="field" id="smartTaskTitle" maxlength="140" required placeholder="e.g. Revise chapter 3">
+   <div class="two" style="margin-top:8px"><div><label class="small" for="smartTaskPriority">Priority</label><select class="field" id="smartTaskPriority"><option value="High">High</option><option value="Medium" selected>Medium</option><option value="Low">Low</option></select></div><div><label class="small" for="smartTaskDue">Due date (optional)</label><input class="field" id="smartTaskDue" type="date"></div></div>
+   <button class="btn primary" style="width:100%">＋ Add task</button>
+  </form>
+  <div class="row" style="margin-top:14px"><strong>Your tasks</strong><select class="field" id="smartTaskFilter" style="width:auto;min-width:130px"><option value="all">All tasks</option><option value="open">Open</option><option value="done">Completed</option></select></div>
+  <div id="smartTaskList" style="margin-top:8px"></div><div id="smartTaskEmpty" class="small">No tasks yet. Add your first task above.</div>
+ </div>
+</section>
+<section id="focus" class="section">
+ <div class="heading">Focus studio</div><div class="muted">A simple focus timer with work and break presets. It keeps time accurately if the tab is backgrounded.</div>
+ <div class="card" style="margin-top:12px;text-align:center">
+  <div class="tag">FOCUS SESSION</div><div id="focusTimerDisplay" class="timer-display" role="timer" aria-live="polite">25:00</div>
+  <div id="focusTimerStatus" class="small">Ready when you are. Choose a duration and start focusing.</div>
+  <div class="two" style="margin-top:12px"><button type="button" class="btn" data-focus-minutes="15">15 min</button><button type="button" class="btn" data-focus-minutes="25">25 min</button><button type="button" class="btn" data-focus-minutes="45">45 min</button><button type="button" class="btn" data-focus-minutes="5">5 min break</button></div>
+  <div class="row" style="justify-content:center;margin-top:12px"><button class="btn primary" id="focusStart">▶ Start</button><button class="btn" id="focusPause" disabled>Ⅱ Pause</button><button class="btn danger" id="focusReset">↻ Reset</button></div>
+  <div class="small" style="margin-top:12px">Completed focus sessions: <strong id="focusSessionsCount">0</strong></div>
+ </div>
+</section>
+<section id="assistant" class="section">
+ <div class="heading">AI Personal Assistant</div><div class="muted">Ask anything, code, translate English ↔ বাংলা, or paste a sentence and ask for a simple explanation. Use the language-action buttons on your text for one-tap translation, meaning, and grammar help. Full AI answers require a connected backend.</div>
+ <div class="card" style="margin-top:12px">
+  <div class="row"><strong>Robin AI · Ask anything</strong><span class="tag" id="aiModeBadge">LOCAL MODE</span><button type="button" class="btn" id="clearAiChat" style="padding:8px 11px">Clear chat</button></div>
+  <div id="aiChatLog" class="ai-chat" aria-live="polite" aria-label="AI conversation"><div class="ai-bubble">হাই! 👋 আমি পড়াশোনা, coding, writing, translation, general knowledge, planning এবং তোমার Life OS progress নিয়ে সাহায্য করতে পারি। বাংলা, Banglish বা English-এ যেকোনো প্রশ্ন করো। পূর্ণ AI mode চালু করতে trusted backend connect করতে হবে।</div></div>
+  <div class="small" style="margin-top:12px;font-weight:700;color:var(--text)">⚡ Instant questions — tap one to ask</div>
+  <div class="prompt-suggestions" aria-label="Instant questions">
+   <button type="button" class="prompt-chip" data-prompt="বাংলায় সহজভাবে বুঝিয়ে বলো: Artificial Intelligence কী এবং এটি কীভাবে কাজ করে?">🌐 Explain AI</button>
+   <button type="button" class="prompt-chip" data-prompt="Python-এ দুইটি সংখ্যার যোগফল বের করার সম্পূর্ণ code লেখো এবং প্রতিটি লাইন বুঝিয়ে দাও।">🐍 Python code</button>
+   <button type="button" class="prompt-chip" data-prompt="Java-তে quadratic equation-এর roots বের করার সম্পূর্ণ program লেখো, উদাহরণসহ বুঝিয়ে দাও।">☕ Java program</button>
+   <button type="button" class="prompt-chip" data-prompt="১২% of ৮৫০ কত? ধাপে ধাপে হিসাব করে বুঝিয়ে দাও।">🧮 Math solve</button>
+   <button type="button" class="prompt-chip" data-prompt="বাংলাদেশের জলবায়ু সম্পর্কে ৫টি গুরুত্বপূর্ণ তথ্য সহজ বাংলায় বলো।">🇧🇩 General knowledge</button>
+   <button type="button" class="prompt-chip" data-prompt="আমার জন্য ২ ঘণ্টার একটি বাস্তবসম্মত study routine তৈরি করো, ছোট বিরতিসহ।">📚 Study routine</button>
+   <button type="button" class="prompt-chip" data-prompt="Translate this into natural, polished English: আজ আমি নতুন কিছু শিখতে চাই এবং নিয়মিত অনুশীলন করতে চাই।">✍️ Translate</button>
+   <button type="button" class="prompt-chip" data-prompt="একটি ছোট JavaScript example লেখো যা button click করলে webpage-এ Hello World দেখায়, এবং কীভাবে চালাব তা বলো।">💻 Web coding</button>
+  </div>
+  <form id="aiChatForm"><label class="small" for="aiPrompt">তোমার প্রশ্ন</label><textarea class="field" id="aiPrompt" rows="4" maxlength="4000" placeholder="যেকোনো প্রশ্ন বা code paste করো… যেমন: এই Python error ঠিক করো, Java program লেখো, science বুঝিয়ে দাও…" required></textarea><div class="small">Tip: code-এর সঙ্গে error message, language, expected result এবং কী চেষ্টা করেছ তা দিলে আরও ভালো উত্তর পাবে।</div><button class="btn primary" style="width:100%">Send message</button></form>
+  <div class="small" style="margin-top:12px">Full AI setup · Backend URL (host root only, e.g. https://your-ai-service.example.com). Keep your API key on the server—never paste it here.</div><input class="field" id="aiBackendUrl" type="url" placeholder="https://your-backend.example.com"><div class="two" style="margin-top:8px"><button class="btn" id="saveAiBackend" type="button">Save backend URL</button><button class="btn" id="testAiBackend" type="button">Test connection</button></div><div class="small" id="aiBackendStatus" role="status" aria-live="polite">⚠️ Full AI is not connected yet. Local mode cannot answer every question. Deploy the backend and add your API key on the server.</div>
+ </div>
+</section>
+<section id="settings" class="section">
+ <div class="heading">Backup & settings</div><div class="muted">Export your local data before switching devices or clearing browser storage.</div>
+ <div class="card" style="margin-top:12px"><strong>Data backup</strong><p class="small">Export a JSON backup containing your Life OS data, or import a previous backup. Import replaces the current saved data, so export first if you need a copy.</p>
+  <div class="two"><button class="btn primary" id="exportBackup">⬇ Export JSON backup</button><label class="btn" for="importBackupFile" style="text-align:center;cursor:pointer">⬆ Import backup</label></div>
+  <input id="importBackupFile" type="file" accept=".json,application/json" hidden><div id="backupStatus" class="small" style="margin-top:9px" aria-live="polite"></div>
+  <hr style="margin:16px 0"><strong>Local data</strong><div class="small" style="margin-top:5px">Your current app saves data in this browser's local storage. It does not automatically sync across devices.</div>
+  <button class="btn danger" id="clearAllData" style="margin-top:12px">Clear all app data</button>
+ </div>
+ <div class="card" style="margin-top:12px"><strong>Feature and compatibility notes</strong><div class="small" style="margin-top:7px">Timers use timestamps so they recover after tab sleep. GitHub Pages can host the frontend, but private AI API keys must never be placed in this HTML file.</div><div id="systemChecks" class="small" style="margin-top:9px"></div><button class="btn" id="runSystemChecks">Run basic self-check</button></div>
+</section>
+<section id="monthly" class="section">
+ <div class="heading">Monthly insights</div><div class="muted">See your consistency, one day at a time.</div>
+ <div class="monthhead"><button class="btn" id="prevMonth">← Previous</button><strong id="monthLabel"></strong><button class="btn" id="nextMonth">Next →</button></div>
+ <div class="grid four">
+  <div class="card"><div class="muted">Fully completed</div><div class="metric" id="mFull">0</div></div>
+  <div class="card"><div class="muted">Partially completed</div><div class="metric" id="mPartial">0</div></div>
+  <div class="card"><div class="muted">Missed days</div><div class="metric" id="mMissed">0</div></div>
+  <div class="card"><div class="muted">Average completion</div><div class="metric" id="mAverage">0%</div></div>
+ </div>
+ <div class="card"><div class="small" style="margin-bottom:10px">GREEN = 100% · AMBER = PARTIAL · RED = NO TASKS COMPLETED · GREY = FUTURE</div><div class="calendar" id="calendar"></div></div>
+ <div class="card" style="margin-top:12px"><strong>Monthly summary</strong><p class="muted" id="summaryText" style="margin:8px 0 0"></p><button class="btn primary" id="exportCsv">Download monthly report (CSV)</button></div>
+ <div class="card" style="margin-top:12px" id="historyPanel"><div class="row"><div><strong>📅 View daily history</strong><div class="muted">Choose any past date to see what you did that day.</div></div><span class="tag">ACTIVITY LOG</span></div><div class="two" style="margin-top:12px"><input class="field" id="historyDate" type="date"><button class="btn primary" id="viewHistory">View full report</button></div><div id="historyResult" style="margin-top:12px"><div class="small">Select a date and press “View full report” to see your saved activity.</div></div></div>
+</section>
+<footer>ROBIN LIFE OS · V11.9 · Your personal growth system · Daily reset at midnight · Data stays on this device</footer>
+</div>
+<script>
+const $=id=>document.getElementById(id), today=new Date();
+const storeKey='robin-life-os-v1';
+let data={};try{data=JSON.parse(localStorage.getItem(storeKey)||'{}')}catch(e){}
+const save=()=>localStorage.setItem(storeKey,JSON.stringify(data));
+const dateKey=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const currentKey=()=>dateKey(today);
+const days=['Monday','Tuesday','Wednesday','Thursday','Friday','Saturday','Sunday'];
+let selected=(today.getDay()+6)%7, studySelected=(today.getDay()+6)%7, monthCursor=new Date(today.getFullYear(),today.getMonth(),1);
+const college=[['5:30–5:45 AM','Wake up & freshen up'],['5:45–6:15 AM','Walk & stretching'],['6:15–7:00 AM','Breakfast & get ready'],['7:00 AM–2:00 PM','College'],['2:00–3:00 PM','Lunch, shower & rest'],['3:00–4:15 PM','Academic study'],['4:15–4:45 PM','Break & snacks'],['4:45–6:00 PM','Home workout'],['6:00–6:30 PM','Shower & recovery'],['6:30–8:00 PM','Advanced video editing'],['8:00–8:45 PM','Dinner & personal time'],['8:45–9:45 PM','Practical editing / project'],['9:45–10:15 PM','Revision & planning'],['10:30 PM','Sleep']];
+const weekend=[['6:00–6:30 AM','Wake up & morning walk'],['6:30–8:00 AM','Breakfast & personal time'],['8:00–10:00 AM','Advanced After Effects'],['10:00–10:30 AM','Break'],['10:30 AM–12:00 PM','Academic study'],['12:00–1:00 PM','Premiere Pro practice'],['1:00–2:00 PM','Lunch & rest'],['2:00–3:30 PM','Personal creative project'],['3:30–4:30 PM','Free time'],['4:30–6:00 PM','Home workout'],['6:00–7:00 PM','Shower & relaxation'],['7:00–8:00 PM','Dinner & family time'],['8:00–9:00 PM','Weekly review / skill development'],['9:00–10:00 PM','Entertainment & personal time'],['10:30 PM','Sleep']];
+const friday=[['6:00–6:30 AM','Wake up & morning walk'],['6:30–8:00 AM','Breakfast & personal time'],['8:00–10:00 AM','Advanced After Effects'],['10:00–10:30 AM','Break'],['10:30 AM–12:00 PM','Academic study'],['12:00–12:30 PM','Premiere Pro practice'],['12:30–2:00 PM','Jummah prayer / Namaj'],['2:00–2:30 PM','Lunch & rest'],['2:30–3:30 PM','Personal creative project'],['3:30–4:30 PM','Free time'],['4:30–6:00 PM','Home workout'],['6:00–7:00 PM','Shower & relaxation'],['7:00–8:00 PM','Dinner & family time'],['8:00–9:00 PM','Weekly review / skill development'],['9:00–10:00 PM','Entertainment & personal time'],['10:30 PM','Sleep']];
+let ae=['Keyframe animation & graph editor','Advanced motion graphics','Expressions & scripting basics','3D camera & lighting','Rotoscoping & masking','VFX and compositing','Complete a motion design project'];
+let pr=['Professional editing workflow','Advanced color grading','Sound design & audio mixing','Speed ramping & transitions','Multi-camera editing','Proxies & performance workflow','Complete a cinematic video'];
+let workouts=['Warm-up & mobility','Main strength workout','Core training','Cardio / conditioning','Cool-down & stretching'];
+let habits=['Drink enough water','Eat balanced meals','Get adequate sleep','Track workout progress'];
+let openListEditor=null;
+if(data.customLists){if(Array.isArray(data.customLists.ae))ae=data.customLists.ae;if(Array.isArray(data.customLists.pr))pr=data.customLists.pr;if(Array.isArray(data.customLists.workouts))workouts=data.customLists.workouts;if(Array.isArray(data.customLists.habits))habits=data.customLists.habits;}
+function isCollegeDay(d){return d<4||d===6} // Friday uses the weekend plan; Sunday uses the Friday/college plan.
+function tasksFor(d){return d===4?friday:(isCollegeDay(d)?college:weekend)}
+function objFor(k){return data[k]||{}}
+function makeTask(label,checked,onchange){let l=document.createElement('label');l.className='task'+(checked?' done':'');let c=document.createElement('input');c.type='checkbox';c.checked=checked;c.addEventListener('change',()=>{l.classList.toggle('done',c.checked);onchange(c.checked)});let s=document.createElement('span');s.textContent=label;l.append(c,s);return l}
+function dayKey(d=selected){let x=new Date(today);x.setDate(today.getDate()+((d-(today.getDay()+6)%7)));return dateKey(x)}
+function dayItems(d){let custom=data.routinePlans&&data.routinePlans[d];return Array.isArray(custom)?custom.map(x=>({time:x.time||'',name:x.name||'',id:x.id})):tasksFor(d).map((x,i)=>({time:x[0],name:x[1],id:'t'+i}))}
+function pct(items,o){return items.length?Math.round(items.filter(x=>o[x.id]).length/items.length*100):0}
+function render(){
+ $('todayDate').textContent=today.toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long',year:'numeric'});
+ const k=currentKey(),d=(today.getDay()+6)%7,items=dayItems(d),o=objFor(k),p=pct(items,o);
+ $('heroPct').textContent=p+'%';$('heroBar').style.width=p+'%';$('taskCount').textContent=items.filter(x=>o[x.id]).length+'/'+items.length;$('score').textContent=p+'%';$('dayType').textContent=isCollegeDay(d)?'COLLEGE DAY':'WEEKEND';
+ const stats=monthStats(today.getFullYear(),today.getMonth());$('monthFull').textContent=stats.full;$('monthAvg').textContent=stats.avg+'%';
+ $('quickTasks').replaceChildren(...items.slice(0,6).map(x=>makeTask(x.name,!!o[x.id],v=>{o[x.id]=v;data[k]=o;save();render()})));
+ renderRoutine();renderMonthly();renderSkills();renderFitness();renderFocusAreas();renderStudyRoutine();
+}
+function renderRoutine(){
+ $('dayPicker').replaceChildren(...[4,5,6,0,1,2,3].map(i=>{let b=document.createElement('button');b.className='day'+(selected===i?' active':'');b.textContent=days[i].slice(0,3);b.onclick=()=>{selected=i;renderRoutine()};return b}));
+ let items=dayItems(selected),k=dayKey(),o=objFor(k),p=pct(items,o);
+ $('routineDay').textContent=days[selected];$('routineType').textContent=selected===4?'Friday · Weekend routine + Jummah prayer 12:30–2:00 PM':(isCollegeDay(selected)?'College day · 7:00 AM–2:00 PM':'Weekend · Creative development');$('routinePct').textContent=p+'%';$('routineBar').style.width=p+'%';
+ $('schedule').replaceChildren(...items.map(x=>{let r=document.createElement('div');r.className='schedule';let t=document.createElement('time');t.textContent=x.time;let holder=document.createElement('div');holder.append(makeTask(x.name,!!o[x.id],v=>{o[x.id]=v;data[k]=o;save();render()}));r.append(t,holder);return r}));
+ renderRoutineEditor();
+}
+function ensureRoutinePlan(d){if(!data.routinePlans)data.routinePlans={};if(!Array.isArray(data.routinePlans[d]))data.routinePlans[d]=tasksFor(d).map((x,i)=>({id:'t'+i,time:x[0],name:x[1]}));return data.routinePlans[d]}
+function openRoutineEditor(){let panel=$('routineEditor');panel.innerHTML='';let arr=ensureRoutinePlan(selected);let wrap=document.createElement('div');wrap.className='list-editor';let note=document.createElement('div');note.className='small';note.textContent='Edit the time and task name, delete tasks, or add your own. Changes save automatically.';wrap.append(note);
+ arr.forEach((item,i)=>{let row=document.createElement('div');row.className='edit-row';row.style.gridTemplateColumns='105px minmax(0,1fr) auto';let time=document.createElement('input');time.className='field';time.value=item.time||'';time.placeholder='Time';time.setAttribute('aria-label','Time');let name=document.createElement('input');name.className='field';name.value=item.name||'';name.placeholder='Task name';name.setAttribute('aria-label','Task name');let update=()=>{item.time=time.value.trim();item.name=name.value.trim()||'Untitled task';data.routinePlans[selected]=arr;save();renderRoutine();};time.addEventListener('change',update);name.addEventListener('change',update);let del=document.createElement('button');del.className='btn danger';del.style.margin='0';del.textContent='Delete';del.onclick=()=>{arr.splice(i,1);data.routinePlans[selected]=arr;save();renderRoutine()};row.append(time,name,del);wrap.append(row)});
+ let add=document.createElement('div');add.className='editor-add';add.style.gridTemplateColumns='100px minmax(0,1fr) auto';let time=document.createElement('input');time.className='field';time.placeholder='Time';time.value='';let name=document.createElement('input');name.className='field';name.placeholder='Write a new routine task';let btn=document.createElement('button');btn.className='btn primary';btn.style.margin='0';btn.textContent='+ Add';btn.onclick=()=>{let v=name.value.trim();if(!v){name.focus();return}arr.push({id:'c'+Date.now(),time:time.value.trim(),name:v});data.routinePlans[selected]=arr;save();renderRoutine()};add.append(time,name,btn);wrap.append(add);let done=document.createElement('button');done.className='btn';done.textContent='Done';done.onclick=()=>{panel.innerHTML='';};wrap.append(done);panel.append(wrap);
+}
+function renderRoutineEditor(){let panel=$('routineEditor');if(panel&&panel.dataset.open==='yes')openRoutineEditor();}
+
+function studyPlan(d){if(!Array.isArray(data.studyPlan))data.studyPlan=[];if(!Array.isArray(data.studyPlan[d]))data.studyPlan[d]=[];return data.studyPlan[d]}
+function addMinutes(time,mins){let [h,m]=time.split(':').map(Number),total=(h*60+m+mins)%(24*60);return String(Math.floor(total/60)).padStart(2,'0')+':'+String(total%60).padStart(2,'0')}
+function displayTime(t){let [h,m]=t.split(':').map(Number),ampm=h>=12?'PM':'AM',hh=h%12||12;return `${hh}:${String(m).padStart(2,'0')} ${ampm}`}
+function renderStudyRoutine(){
+ $('studyDayPicker').replaceChildren(...[4,5,6,0,1,2,3].map(i=>{let b=document.createElement('button');b.className='day'+(studySelected===i?' active':'');b.textContent=days[i].slice(0,3);b.onclick=()=>{studySelected=i;renderStudyRoutine()};return b}));
+ $('studyDayTitle').textContent=days[studySelected]+' study plan';let list=studyPlan(studySelected);
+ $('studySessions').replaceChildren(...list.map((item,i)=>{let card=document.createElement('div');card.className='card';card.style.cssText='padding:12px;margin:9px 0;background:#0d171d';
+ let top=document.createElement('div');top.className='row';let title=document.createElement('strong');title.textContent='Session '+(i+1);let duration=document.createElement('span');duration.className='tag';duration.textContent=(item.duration||60)+' MIN';top.append(title,duration);
+ let fields=document.createElement('div');fields.className='two';let subject=document.createElement('input');subject.className='field';subject.placeholder='Subject / topic';subject.value=item.subject||'';subject.setAttribute('aria-label','Subject or topic');let time=document.createElement('input');time.className='field';time.type='time';time.value=item.time||'15:00';time.setAttribute('aria-label','Start time');let durationInput=document.createElement('input');durationInput.className='field';durationInput.type='number';durationInput.min='1';durationInput.max='600';durationInput.step='1';durationInput.value=item.duration||60;durationInput.placeholder='Duration (minutes)';durationInput.setAttribute('aria-label','Duration in minutes');
+ let update=()=>{item.subject=subject.value;item.time=time.value||'15:00';item.duration=Math.max(1,Math.min(600,Number(durationInput.value)||60));duration.textContent=item.duration+' MIN';start.textContent='▶ Start '+item.duration+'-min timer';data.studyPlan[studySelected]=list;save();end.textContent=displayTime(item.time)+' – '+displayTime(addMinutes(item.time,item.duration))};subject.addEventListener('change',update);time.addEventListener('change',update);durationInput.addEventListener('change',update);
+ fields.append(subject,time,durationInput);let bottom=document.createElement('div');bottom.className='row';bottom.style.marginTop='8px';let end=document.createElement('span');end.className='small';end.textContent=displayTime(item.time||'15:00')+' – '+displayTime(addMinutes(item.time||'15:00',item.duration||60));let actions=document.createElement('div');actions.className='row';actions.style.marginTop='8px';let start=document.createElement('button');start.className='btn primary';start.style.margin='0';start.textContent='▶ Start '+(item.duration||60)+'-min timer';start.onclick=()=>startStudyTimer(item.subject||'Study session',item.duration||60);let del=document.createElement('button');del.className='btn danger';del.style.margin='0';del.textContent='Remove';del.onclick=()=>{list.splice(i,1);data.studyPlan[studySelected]=list;save();renderStudyRoutine()};actions.append(start,del);card.append(top,fields,bottom,actions);return card}));
+ $('studyStatus').textContent=list.length?`${list.length} one-hour session${list.length===1?'':'s'} planned for ${days[studySelected]}. Changes save automatically.`:'No sessions yet. Add your first 1-hour study session.';
+}
+let studyTimerHandle=null;
+let studyTimerFinishedId=null;
+let selectedStudyDuration=60;
+function updateNotificationStatus(){let el=$('notificationStatus');if(!el)return;if(!('Notification' in window)){el.textContent='Browser notifications unavailable';return}el.textContent=Notification.permission==='granted'?'Phone notifications enabled':Notification.permission==='denied'?'Notifications blocked — allow them in Android app settings':'Tap Enable notifications for phone alerts'}
+async function requestStudyNotificationPermission(){return false}
+async function fireStudyNotification(subject,duration,id){if(id&&studyTimerFinishedId===id)return;studyTimerFinishedId=id||'finished-'+Date.now();try{let audio=$('studyAlertSound');if(audio){audio.pause();audio.currentTime=0;let play=audio.play();if(play&&play.catch)play.catch(()=>{})}}catch(e){}try{if('Notification'in window&&Notification.permission==='granted'){let title='Study timer finished!';let options={body:`${subject||'Study session'} · ${duration||'Your'} minutes completed. Time for a break!`,icon:'./icon-192.png',badge:'./icon-192.png',tag:'robin-study-session-'+(id||Date.now()),renotify:true};if('serviceWorker'in navigator){let reg=await navigator.serviceWorker.ready;await reg.showNotification(title,options)}else new Notification(title,options)}}catch(e){}}
+function clearStudyTimer(){if(studyTimerHandle){clearInterval(studyTimerHandle);clearTimeout(studyTimerHandle)}studyTimerHandle=null}
+function studyTimerRemaining(t){if(!t)return 0;return t.paused?Math.max(0,t.remainingMs||0):Math.max(0,t.endAt-Date.now())}
+function updateStudyTimerButtons(){let t=data.studyTimer,active=!!t&&!t.paused&&!t.done,paused=!!t&&!!t.paused;let a=$('studyTimerStart'),b=$('studyTimerPause'),c=$('studyTimerReset');if(a){a.disabled=active;a.textContent=paused?'▶ Resume':'▶ Start'}if(b)b.disabled=!active;if(c)c.disabled=!t}
+function renderStudyTimer(){let t=data.studyTimer;if(!t){$('studyTimerStatus').textContent='00:00:00';updateStudyTimerButtons();return}let left=studyTimerRemaining(t),hrs=Math.floor(left/3600000),mm=Math.floor(left%3600000/60000),ss=Math.floor(left%60000/1000);$('studyTimerStatus').textContent=[hrs,mm,ss].map(v=>String(v).padStart(2,'0')).join(':');updateStudyTimerButtons();if(left<=0&&!t.paused){clearStudyTimer();let id=t.id||String(t.endAt);delete data.studyTimer;save();$('studyTimerHint').textContent='⏰ '+(t.subject||'Study session')+' complete!';fireStudyNotification(t.subject||'Study session',t.duration,id);renderStudyTimer();return}$('studyTimerHint').textContent=t.paused?'⏸ '+(t.subject||'Study session')+' · paused':'⏳ '+(t.subject||'Study session')+' · time remaining'}
+function scheduleStudyTimer(){clearStudyTimer();let t=data.studyTimer;if(!t)return;renderStudyTimer();if(data.studyTimer&&!data.studyTimer.paused)studyTimerHandle=setInterval(renderStudyTimer,250)}
+function startStudyTimer(subject,duration=60){let minutes=Math.max(1,Math.min(600,Number(duration)||60));let id='study-'+Date.now();data.studyTimer={id,endAt:Date.now()+minutes*60*1000,subject,duration:minutes,paused:false};studyTimerFinishedId=null;save();scheduleStudyTimer();$('studyTimerHint').textContent='⏳ '+subject+' · countdown running';}
+function pauseStudyTimer(){let t=data.studyTimer;if(!t||t.paused)return;t.remainingMs=Math.max(0,t.endAt-Date.now());t.paused=true;delete t.endAt;save();scheduleStudyTimer();renderStudyTimer()}
+function resumeStudyTimer(){let t=data.studyTimer;if(!t||!t.paused)return;t.endAt=Date.now()+Math.max(0,t.remainingMs||0);t.paused=false;delete t.remainingMs;save();scheduleStudyTimer();renderStudyTimer()}
+function resetStudyTimer(){clearStudyTimer();data.studyTimer=null;save();$('studyTimerHint').textContent='Timer reset. Choose a session and start again.';renderStudyTimer()}
+$('studyTimerStart').onclick=()=>{let t=data.studyTimer;if(t&&t.paused){resumeStudyTimer();return}if(t&&!t.paused)return;let session=studyPlan(studySelected)[0];startStudyTimer(session?.subject||'Study session',session?.duration||selectedStudyDuration)};
+$('studyTimerPause').onclick=pauseStudyTimer;$('studyTimerReset').onclick=resetStudyTimer;
+window.addEventListener('pageshow',()=>{if(data.studyTimer)scheduleStudyTimer()});document.addEventListener('visibilitychange',()=>{if(!document.hidden&&data.studyTimer)scheduleStudyTimer()});
+scheduleStudyTimer();
+
+let studyStopwatchHandle=null;
+function stopwatchElapsed(){let s=data.studyStopwatch||{elapsedMs:0,running:false};return Math.max(0,(s.elapsedMs||0)+(s.running&&s.startedAt?Date.now()-s.startedAt:0))}
+function renderStudyStopwatch(){let ms=stopwatchElapsed(),total=Math.floor(ms/1000),h=Math.floor(total/3600),m=Math.floor(total%3600/60),sec=total%60;let el=$('studyStopwatchStatus');if(el)el.textContent=[h,m,sec].map(v=>String(v).padStart(2,'0')).join(':');let s=data.studyStopwatch||{};let start=$('studyStopwatchStart'),pause=$('studyStopwatchPause');if(start)start.disabled=!!s.running;if(pause)pause.disabled=!s.running}
+function startStudyStopwatch(){let s=data.studyStopwatch||{elapsedMs:0,running:false};if(s.running)return;s.startedAt=Date.now();s.running=true;data.studyStopwatch=s;save();renderStudyStopwatch();if(studyStopwatchHandle)clearInterval(studyStopwatchHandle);studyStopwatchHandle=setInterval(renderStudyStopwatch,250)}
+function pauseStudyStopwatch(){let s=data.studyStopwatch||{elapsedMs:0,running:false};if(!s.running)return;s.elapsedMs=stopwatchElapsed();s.running=false;s.startedAt=null;data.studyStopwatch=s;save();if(studyStopwatchHandle)clearInterval(studyStopwatchHandle);studyStopwatchHandle=null;renderStudyStopwatch()}
+function resetStudyStopwatch(){if(studyStopwatchHandle)clearInterval(studyStopwatchHandle);studyStopwatchHandle=null;data.studyStopwatch={elapsedMs:0,running:false,startedAt:null};save();renderStudyStopwatch()}
+$('studyStopwatchStart').onclick=startStudyStopwatch;
+$('studyStopwatchPause').onclick=pauseStudyStopwatch;
+$('studyStopwatchReset').onclick=resetStudyStopwatch;
+renderStudyStopwatch();if(data.studyStopwatch&&data.studyStopwatch.running){studyStopwatchHandle=setInterval(renderStudyStopwatch,250)}
+function monthStats(y,m){let count=new Date(y,m+1,0).getDate(),full=0,partial=0,missed=0,total=0,elapsed=0;for(let n=1;n<=count;n++){let dt=new Date(y,m,n);if(dt>today)continue;elapsed++;let day=(dt.getDay()+6)%7,items=dayItems(day),o=objFor(dateKey(dt)),p=pct(items,o);total+=p;if(p===100)full++;else if(p>0)partial++;else missed++}return {full,partial,missed,avg:elapsed?Math.round(total/elapsed):0,elapsed}}
+function renderMonthly(){
+ let y=monthCursor.getFullYear(),m=monthCursor.getMonth(),s=monthStats(y,m);$('monthLabel').textContent=monthCursor.toLocaleDateString(undefined,{month:'long',year:'numeric'});$('mFull').textContent=s.full;$('mPartial').textContent=s.partial;$('mMissed').textContent=s.missed;$('mAverage').textContent=s.avg+'%';
+ $('summaryText').textContent=`You completed ${s.full} full days, ${s.partial} partial days and had ${s.missed} days with no completed routine tasks across ${s.elapsed} elapsed days. Your average completion rate is ${s.avg}%.`;
+ let first=new Date(y,m,1).getDay(),len=new Date(y,m+1,0).getDate(),cells=[];['S','M','T','W','T','F','S'].forEach(x=>{let a=document.createElement('div');a.className='small';a.style.textAlign='center';a.textContent=x;cells.push(a)});for(let i=0;i<first;i++){let a=document.createElement('div');cells.push(a)}
+ for(let n=1;n<=len;n++){let dt=new Date(y,m,n),d=(dt.getDay()+6)%7,o=objFor(dateKey(dt)),p=pct(dayItems(d),o),a=document.createElement('button');a.className='calday';if(dt>today)a.style.opacity='.45';else if(p===100)a.classList.add('full');else if(p>0)a.classList.add('partial');else a.classList.add('missed');if(dateKey(dt)===currentKey())a.classList.add('today');let num=document.createElement('div');num.className='num';num.textContent=n;let dot=document.createElement('div');dot.className='dot';dot.textContent=dt>today?'—':p+'%';a.append(num,dot);a.title=`${dateKey(dt)} · ${p}% complete`;a.onclick=()=>{if(dt<=today){selected=d;document.querySelector('[data-tab="routine"]').click();renderRoutine()}};cells.push(a)}
+ $('calendar').replaceChildren(...cells);
+}
+
+function renderFocusAreas(){
+ const d=(today.getDay()+6)%7,items=dayItems(d),o=objFor(currentKey());
+ const set=(key,done,total,detail)=>{let p=total?Math.round(done/total*100):0;$('focus'+key+'Text').textContent=detail||`${done}/${total} tasks`;$('focus'+key+'Pct').textContent=p+'%';$('focus'+key+'Bar').style.width=p+'%'};
+ const academic=items.filter(x=>/academic|study|revision/i.test(x.name));
+ set('Academic',academic.filter(x=>o[x.id]).length,academic.length,academic.length?`${academic.filter(x=>o[x.id]).length}/${academic.length} tasks`:'No study task today');
+ const editing=items.filter(x=>/after effects|premiere|editing|creative project/i.test(x.name));
+ const aeData=objFor(currentKey()+'-ae'),prData=objFor(currentKey()+'-pr');
+ const skillDone=ae.filter((x,i)=>aeData['s'+i]).length+pr.filter((x,i)=>prData['s'+i]).length;
+ const routineDone=editing.filter(x=>o[x.id]).length, editingDone=skillDone+routineDone, editingTotal=ae.length+pr.length+editing.length;
+ set('Editing',editingDone,editingTotal,`${editingDone}/${editingTotal} practice items`);
+ const fit=objFor(currentKey()+'-fitness'),fitDone=workouts.filter((x,i)=>fit['w'+i]).length;
+ set('Fitness',fitDone,workouts.length,`${fitDone}/${workouts.length} workout tasks`);
+ const sleep=objFor(currentKey()+'-sleep'),hrs=Number(sleep.hours||0),goal=Number(sleep.goal||8),sleepPct=sleep.hours===undefined?0:Math.min(100,Math.round(hrs/goal*100));
+ $('focusRecoveryText').textContent=sleep.hours===undefined?'Sleep not logged':`${hrs}h / ${goal}h sleep`;$('focusRecoveryPct').textContent=sleepPct+'%';$('focusRecoveryBar').style.width=sleepPct+'%';
+}
+function manageList(which){openListEditor=openListEditor===which?null:which;renderSkills();renderFitness()}
+function renderListEditor(which,arr,label){
+ const host=$(which+'Editor');if(!host)return;host.replaceChildren();if(openListEditor!==which)return;
+ const panel=document.createElement('div');panel.className='list-editor';
+ const heading=document.createElement('div');heading.className='small';heading.textContent='Edit each name below. Changes save automatically.';panel.append(heading);
+ arr.forEach((item,index)=>{
+  const row=document.createElement('div');row.className='edit-row';
+  const input=document.createElement('input');input.className='field';input.type='text';input.value=item;input.setAttribute('aria-label',label+' '+(index+1));
+  input.addEventListener('change',()=>{const value=input.value.trim();if(!value){input.value=arr[index];return}arr[index]=value;persistCustomLists();renderSkills();renderFitness();renderFocusAreas()});
+  const del=document.createElement('button');del.className='btn danger';del.type='button';del.textContent='Delete';del.onclick=()=>{if(!confirm('Delete “'+arr[index]+'”?'))return;arr.splice(index,1);shiftChecklistIndexes(which,index);persistCustomLists();renderSkills();renderFitness();renderFocusAreas()};
+  row.append(input,del);panel.append(row);
+ });
+ const add=document.createElement('div');add.className='editor-add';const field=document.createElement('input');field.className='field';field.type='text';field.placeholder='Write a new '+label.toLowerCase();
+ const addBtn=document.createElement('button');addBtn.className='btn primary';addBtn.type='button';addBtn.textContent='+ Add';addBtn.onclick=()=>{const value=field.value.trim();if(!value){field.focus();return}arr.push(value);persistCustomLists();renderSkills();renderFitness();renderFocusAreas()};
+ add.append(field,addBtn);panel.append(add);const close=document.createElement('button');close.className='btn';close.type='button';close.textContent='Done';close.onclick=()=>{openListEditor=null;renderSkills();renderFitness()};panel.append(close);host.append(panel);
+}
+function persistCustomLists(){data.customLists={ae,pr,workouts,habits};save()}
+function shiftChecklistIndexes(which,removed){let suffix=which==='ae'?'-ae':which==='pr'?'-pr':'-fitness',prefix=which==='ae'||which==='pr'?'s':which==='workouts'?'w':'h';for(const key of Object.keys(data)){if(!key.endsWith(suffix)||!data[key]||typeof data[key]!=='object')continue;let o=data[key],next={};for(const [k,v] of Object.entries(o)){let m=k.match(new RegExp('^'+prefix+'(\\d+)$'));if(!m){next[k]=v;continue}let i=Number(m[1]);if(i<removed)next[k]=v;else if(i>removed)next[prefix+(i-1)]=v;}data[key]=next;}}
+function renderSkills(){skillGroup('ae',ae,'ae');skillGroup('pr',pr,'pr');$('projectName').value=data.project||''}
+function skillGroup(id,arr,prefix){let k=currentKey()+'-'+id,o=objFor(k),done=arr.filter((x,i)=>o['s'+i]).length,p=arr.length?Math.round(done/arr.length*100):0;$(prefix+'Tasks').replaceChildren(...arr.map((x,i)=>makeTask(x,!!o['s'+i],v=>{o['s'+i]=v;data[k]=o;save();renderSkills()})));$(prefix+'Bar').style.width=p+'%';$(prefix+'Pct').textContent=p+'%';$(prefix+'Count').textContent=done+'/'+arr.length+' topics';renderListEditor(id,arr,id==='ae'?'After Effects topic':'Premiere Pro topic')}
+let fitnessTimerTick=null;
+function exerciseItems(){if(!Array.isArray(data.customExercises))data.customExercises=[{name:'Warm-up',minutes:5},{name:'Push-ups',minutes:10},{name:'Squats',minutes:10},{name:'Plank',minutes:5},{name:'Stretching',minutes:5}];return data.customExercises}
+function fmtTimer(sec){sec=Math.max(0,Math.ceil(sec));return String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0')}
+function updateFitnessTimer(){let t=data.fitnessTimer;if(!t){$('fitnessTimerDisplay').textContent='00:00';$('fitnessTimerLabel').textContent='Choose an exercise and press Start.';$('fitnessPause').disabled=true;$('fitnessResume').disabled=true;$('fitnessReset').disabled=true;return}let remain=t.paused?Math.max(0,t.remaining):Math.max(0,Math.ceil((t.endAt-Date.now())/1000));$('fitnessTimerDisplay').textContent=fmtTimer(remain);$('fitnessTimerLabel').textContent=t.name+' · '+t.minutes+' minutes';$('fitnessPause').disabled=!!t.paused;$('fitnessResume').disabled=!t.paused;$('fitnessReset').disabled=false;if(remain<=0&&!t.done){t.done=true;save();$('fitnessTimerStatus').textContent='✅ '+t.name+' complete! Great work.';try{let audio=$('studyAlertSound');if(audio){audio.pause();audio.currentTime=0;let play=audio.play();if(play&&play.catch)play.catch(()=>{})}}catch(e){}if('Notification'in window&&Notification.permission==='granted'){let opts={body:t.name+' timer has finished.',icon:'./icon-192.png',badge:'./icon-192.png',tag:'robin-fitness-'+Date.now(),renotify:true};if('serviceWorker'in navigator)navigator.serviceWorker.ready.then(reg=>reg.showNotification('ROBIN LIFE OS · Workout complete',opts)).catch(()=>{});else try{new Notification('ROBIN LIFE OS · Workout complete',opts)}catch(e){}}else if(navigator.vibrate)navigator.vibrate([250,120,250]);clearInterval(fitnessTimerTick);fitnessTimerTick=null;return}}
+function startFitnessTimer(name,minutes){if(!name||!minutes||minutes<1||minutes>600)return;data.fitnessTimer={name,minutes,endAt:Date.now()+minutes*60000,paused:false,done:false};save();$('fitnessTimerStatus').textContent='Timer started. Keep the app running for the most reliable alert.';if(fitnessTimerTick)clearInterval(fitnessTimerTick);updateFitnessTimer();fitnessTimerTick=setInterval(updateFitnessTimer,500)}
+function renderExercises(){let host=$('exerciseList');host.replaceChildren();exerciseItems().forEach((item,i)=>{let row=document.createElement('div');row.className='exercise-row';let name=document.createElement('input');name.className='field';name.value=item.name;name.setAttribute('aria-label','Exercise name');name.addEventListener('change',()=>{let v=name.value.trim();if(v){item.name=v;save();renderExercises()}});let mins=document.createElement('input');mins.className='field';mins.type='number';mins.min='1';mins.max='600';mins.value=item.minutes;mins.title='Minutes';mins.addEventListener('change',()=>{let v=Math.max(1,Math.min(600,Number(mins.value)||1));item.minutes=v;save();renderExercises()});let del=document.createElement('button');del.className='btn danger';del.textContent='Delete';del.onclick=()=>{if(confirm('Delete '+item.name+'?')){exerciseItems().splice(i,1);save();renderExercises()}};let run=document.createElement('button');run.className='btn primary start-ex';run.textContent='▶ Start';run.onclick=()=>startFitnessTimer(item.name,item.minutes);row.append(name,mins,del,run);host.append(row)});}
+function renderWater(){let k=currentKey()+'-water',o=objFor(k),amount=Number(o.amount||0),goal=Number(o.goal||2.5),p=goal>0?Math.min(100,Math.round(amount/goal*100)):0;$('waterAmount').value=o.amount??'';$('waterGoal').value=goal;$('waterSummary').textContent=amount.toFixed(1)+' L / '+goal.toFixed(1)+' L';$('waterPercent').textContent=p+'%';$('waterBar').style.width=p+'%';$('waterStatus').textContent=amount>=goal?'Daily water target reached. Great job!':` ${(Math.max(0,goal-amount)).toFixed(1)} L left to reach your target.`}
+function renderSleep(){let o=objFor(currentKey()+'-sleep'),hours=Number(o.hours||0),goal=Number(o.goal||8),p=goal>0?Math.min(100,Math.round(hours/goal*100)):0;$('sleepHours').value=o.hours??'';$('sleepGoal').value=goal;$('sleepSummary').textContent=(o.hours===undefined?'—':hours.toFixed(2).replace(/\.?0+$/,''))+' h';$('sleepBar').style.width=p+'%';$('sleepStatus').textContent=o.hours===undefined?'Add your sleep duration to track recovery.':hours>=goal?'Sleep goal reached. Keep your recovery consistent.':`${Math.max(0,goal-hours).toFixed(2).replace(/\.?0+$/,'')} hours below your sleep goal.`}
+let sleepTimerTick=null;
+function sleepElapsed(){let t=data.sleepSession;if(!t||!t.startedAt)return 0;return Math.max(0,Math.floor((Date.now()-t.startedAt)/1000))}
+function fmtSleepTimer(sec){let h=Math.floor(sec/3600),m=Math.floor((sec%3600)/60),s=sec%60;return [h,m,s].map(x=>String(x).padStart(2,'0')).join(':')}
+function updateSleepTimer(){let t=data.sleepSession,active=!!(t&&t.startedAt);$('sleepTimerDisplay').textContent=fmtSleepTimer(sleepElapsed());$('sleepStart').disabled=active;$('sleepStop').disabled=!active;$('sleepTimerStatus').textContent=active?'Sleep timer running · started '+new Date(t.startedAt).toLocaleString():'Timer is not running.'}
+function startSleepTimer(){if(data.sleepSession&&data.sleepSession.startedAt)return;data.sleepSession={startedAt:Date.now(),date:currentKey()};save();updateSleepTimer();if(sleepTimerTick)clearInterval(sleepTimerTick);sleepTimerTick=setInterval(updateSleepTimer,1000)}
+function stopSleepTimer(){let t=data.sleepSession;if(!t||!t.startedAt)return;let seconds=sleepElapsed(),hours=Math.round((seconds/3600)*100)/100,key=(t.date||currentKey())+'-sleep',old=objFor(key),goal=Number(old.goal||$('sleepGoal').value||8);data[key]={hours,goal,startedAt:t.startedAt,endedAt:Date.now()};data.sleepSession=null;save();if(sleepTimerTick)clearInterval(sleepTimerTick);sleepTimerTick=null;$('sleepHours').value=hours.toFixed(2);renderSleep();updateSleepTimer();$('sleepTimerStatus').textContent='Saved result: '+hours.toFixed(2)+' hours ('+fmtSleepTimer(seconds)+').'}
+
+function renderFitness(){let k=currentKey()+'-fitness',o=objFor(k);$('workoutTasks').replaceChildren(...workouts.map((x,i)=>makeTask(x,!!o['w'+i],v=>{o['w'+i]=v;data[k]=o;save()})));$('fitnessHabits').replaceChildren(...habits.map((x,i)=>makeTask(x,!!o['h'+i],v=>{o['h'+i]=v;data[k]=o;save()})));renderListEditor('workouts',workouts,'Workout task');renderListEditor('habits',habits,'Habit');$('workoutNote').value=data[currentKey()+'-note']||'';renderExercises();updateFitnessTimer();}
+
+// Navigation slider controls: one tap moves to the next/previous group of tabs.
+(()=>{const shell=document.querySelector('.nav-slider'),track=shell&&shell.querySelector('nav'),prev=shell&&shell.querySelector('.nav-prev'),next=shell&&shell.querySelector('.nav-next');if(!track||!prev||!next)return;const step=()=>Math.max(170,Math.round(track.clientWidth*.72));function update(){const max=track.scrollWidth-track.clientWidth;prev.disabled=track.scrollLeft<=3;next.disabled=track.scrollLeft>=max-3;}prev.addEventListener('click',()=>track.scrollBy({left:-step(),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'}));next.addEventListener('click',()=>track.scrollBy({left:step(),behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'}));track.addEventListener('scroll',update,{passive:true});window.addEventListener('resize',update);track.querySelectorAll('[data-tab]').forEach(b=>b.addEventListener('click',()=>{b.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'nearest',inline:'center'});setTimeout(update,220)}));update();setTimeout(update,300);})();
+
+document.querySelectorAll('nav [data-tab]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('nav [data-tab]').forEach(x=>x.classList.toggle('active',x===b));document.querySelectorAll('.section').forEach(x=>x.classList.toggle('active',x.id===b.dataset.tab));b.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'nearest',inline:'nearest'});document.querySelector('nav').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'start'});if(b.dataset.tab==='monthly')renderMonthly();if(b.dataset.tab==='study')renderStudyRoutine();if(b.dataset.tab==='recovery'){renderWater();renderSleep()}}));
+document.querySelectorAll('[data-goto]').forEach(b=>b.onclick=()=>document.querySelector('[data-tab="'+b.dataset.goto+'"]').click());
+ document.querySelectorAll('[data-prompt]').forEach(b=>b.addEventListener('click',()=>{const p=document.getElementById('aiPrompt'),form=document.getElementById('aiChatForm');if(!p||!form)return;p.value=b.dataset.prompt||'';form.scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth',block:'center'});if(typeof form.requestSubmit==='function')form.requestSubmit();else form.dispatchEvent(new Event('submit',{bubbles:true,cancelable:true}));}));
+$('addStudySession').onclick=()=>{let list=studyPlan(studySelected);list.push({subject:'',time:'15:00',duration:60});data.studyPlan[studySelected]=list;save();renderStudyRoutine()};
+$('customizeRoutine').onclick=()=>{let panel=$('routineEditor');panel.dataset.open=panel.dataset.open==='yes'?'no':'yes';if(panel.dataset.open==='yes')openRoutineEditor();else panel.innerHTML=''};
+$('dashboardCustomize').onclick=()=>{document.querySelector('[data-tab="routine"]').click();selected=(today.getDay()+6)%7;renderRoutine();$('routineEditor').dataset.open='yes';openRoutineEditor()};
+$('resetDay').onclick=()=>{if(confirm('Clear all routine ticks for this selected date?')){data[dayKey()]={};save();render()}};
+$('prevMonth').onclick=()=>{monthCursor=new Date(monthCursor.getFullYear(),monthCursor.getMonth()-1,1);renderMonthly()};
+$('nextMonth').onclick=()=>{monthCursor=new Date(monthCursor.getFullYear(),monthCursor.getMonth()+1,1);renderMonthly()};
+$('saveProject').onclick=()=>{data.project=$('projectName').value.trim();save();$('projectStatus').textContent='Project saved on this device.'};
+$('saveNote').onclick=()=>{data[currentKey()+'-note']=$('workoutNote').value;save();$('noteStatus').textContent='Workout notes saved.'};
+$('saveWater').onclick=()=>{let amount=Number($('waterAmount').value),goal=Number($('waterGoal').value);if(!Number.isFinite(amount)||amount<0||amount>15||!Number.isFinite(goal)||goal<0.5||goal>10){$('waterStatus').textContent='Please enter a valid amount (0–15 L) and target (0.5–10 L).';return}let k=currentKey()+'-water';data[k]={amount,goal};save();renderWater()};
+$('saveSleep').onclick=()=>{let hours=Number($('sleepHours').value),goal=Number($('sleepGoal').value);if(!Number.isFinite(hours)||hours<0||hours>24||!Number.isFinite(goal)||goal<1||goal>16){$('sleepStatus').textContent='Enter sleep hours from 0–24 and a goal from 1–16 hours.';return}data[currentKey()+'-sleep']={hours,goal};save();renderSleep()};$('sleepStart').onclick=startSleepTimer;$('sleepStop').onclick=stopSleepTimer;
+$('addExercise').onclick=()=>{let name=$('exerciseName').value.trim(),minutes=Number($('exerciseMinutes').value);if(!name||!Number.isFinite(minutes)||minutes<1||minutes>600){$('exerciseName').focus();return}exerciseItems().push({name,minutes});save();$('exerciseName').value='';renderExercises()};
+$('fitnessPause').onclick=()=>{let t=data.fitnessTimer;if(!t||t.paused||t.done)return;t.remaining=Math.max(0,Math.ceil((t.endAt-Date.now())/1000));t.paused=true;save();updateFitnessTimer()};
+$('fitnessResume').onclick=()=>{let t=data.fitnessTimer;if(!t||!t.paused||t.done)return;t.endAt=Date.now()+t.remaining*1000;t.paused=false;save();updateFitnessTimer();if(fitnessTimerTick)clearInterval(fitnessTimerTick);fitnessTimerTick=setInterval(updateFitnessTimer,500)};
+$('fitnessReset').onclick=()=>{if(fitnessTimerTick)clearInterval(fitnessTimerTick);fitnessTimerTick=null;data.fitnessTimer=null;save();$('fitnessTimerStatus').textContent='Timer reset.';updateFitnessTimer()};
+function historySection(title,items){let box=document.createElement('div');box.style.cssText='padding:11px 0;border-top:1px solid var(--line)';let h=document.createElement('strong');h.textContent=title;box.append(h);let list=document.createElement('div');list.className='small';list.style.marginTop='7px';if(!items.length){list.textContent='No saved activity.'}else{items.forEach(item=>{let row=document.createElement('div');row.style.cssText='padding:4px 0;display:flex;gap:8px;align-items:flex-start';let mark=document.createElement('span');mark.textContent=item.done===true?'✓':item.done===false?'○':'•';mark.style.color=item.done===true?'#a6e36b':'var(--muted)';let txt=document.createElement('span');txt.textContent=item.text;row.append(mark,txt);list.append(row)})}box.append(list);return box}
+function renderDailyHistory(){let input=$('historyDate'),host=$('historyResult');let value=input.value||currentKey();input.value=value;let dt=new Date(value+'T12:00:00');if(Number.isNaN(dt.getTime())){host.textContent='Please choose a valid date.';return}let key=dateKey(dt),weekday=(dt.getDay()+6)%7,dayData=objFor(key),routine=dayItems(weekday),done=routine.filter(x=>dayData[x.id]).length,percent=pct(routine,dayData);host.replaceChildren();let top=document.createElement('div');top.className='card';top.style.cssText='background:#101d2b;margin-bottom:10px';let dateTitle=document.createElement('strong');dateTitle.textContent=dt.toLocaleDateString(undefined,{weekday:'long',day:'numeric',month:'long',year:'numeric'});let score=document.createElement('div');score.className='metric';score.textContent=percent+'%';let caption=document.createElement('div');caption.className='small';caption.textContent=`Routine progress · ${done}/${routine.length} tasks completed`;top.append(dateTitle,score,caption);host.append(top);
+ host.append(historySection('◷ Daily routine',routine.map(x=>({text:(x.time?x.time+' · ':'')+x.name,done:!!dayData[x.id]}))));
+ let study=data.studyPlan&&data.studyPlan[weekday]||[];host.append(historySection('📚 Planned study sessions',study.map(x=>({text:`${x.time||'Time not set'} · ${x.subject||'Untitled topic'} · ${x.duration||60} minutes`}))));
+ let aeData=objFor(key+'-ae'),prData=objFor(key+'-pr');host.append(historySection('🎬 After Effects skills',ae.map((x,i)=>({text:x,done:!!aeData['s'+i]}))));host.append(historySection('🎥 Premiere Pro skills',pr.map((x,i)=>({text:x,done:!!prData['s'+i]}))));
+ let fit=objFor(key+'-fitness');host.append(historySection('💪 Workout checklist',workouts.map((x,i)=>({text:x,done:!!fit['w'+i]}))));host.append(historySection('🌱 Healthy habits',habits.map((x,i)=>({text:x,done:!!fit['h'+i]}))));
+ let water=objFor(key+'-water'),sleep=objFor(key+'-sleep');let recovery=[];if(water.amount!==undefined)recovery.push({text:`Water intake: ${water.amount} L · Goal: ${water.goal||2.5} L`});if(sleep.hours!==undefined)recovery.push({text:`Sleep: ${sleep.hours} hours · Goal: ${sleep.goal||8} hours`});if(!recovery.length)recovery.push({text:'No water or sleep record saved.'});host.append(historySection('💧 Water & 🌙 sleep',recovery));
+ let note=data[key+'-note'];host.append(historySection('📝 Workout notes',note?[{text:note}]:[]));
+ let ex=data.fitnessTimer&&data.fitnessTimer.done?data.fitnessTimer:null;if(ex)host.append(historySection('⏱️ Last fitness timer status',[{text:`${ex.name} · ${ex.minutes} minutes${ex.done?' · completed':''}`} ]));
+ let foot=document.createElement('div');foot.className='small';foot.style.marginTop='10px';foot.textContent='This report shows information saved on this device. Study sessions are planned sessions; individual study completion is not currently recorded.';host.append(foot)}
+$('viewHistory').onclick=renderDailyHistory;$('historyDate').value=currentKey();
+$('exportCsv').onclick=()=>{let y=monthCursor.getFullYear(),m=monthCursor.getMonth(),lines=['Date,Day,Completed tasks,Total tasks,Completion percent,Status,Water litres,Sleep hours'];for(let n=1;n<=new Date(y,m+1,0).getDate();n++){let dt=new Date(y,m,n);if(dt>today)continue;let d=(dt.getDay()+6)%7,its=dayItems(d),o=objFor(dateKey(dt)),done=its.filter(x=>o[x.id]).length,p=pct(its,o),status=p===100?'Complete':p>0?'Partial':'Missed';let water=objFor(dateKey(dt)+'-water').amount??'',sleep=objFor(dateKey(dt)+'-sleep').hours??'';lines.push([dateKey(dt),days[d],done,its.length,p+'%',status,water,sleep].join(','))}let blob=new Blob([lines.join('\\n')],{type:'text/csv'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=`Robin-Life-OS-${y}-${String(m+1).padStart(2,'0')}.csv`;a.click();URL.revokeObjectURL(url)};
+render();updateSleepTimer();if(data.sleepSession&&data.sleepSession.startedAt)sleepTimerTick=setInterval(updateSleepTimer,1000);if(data.fitnessTimer&&!data.fitnessTimer.done&&!data.fitnessTimer.paused){updateFitnessTimer();fitnessTimerTick=setInterval(updateFitnessTimer,500)}
+// Each date has its own saved checklist, water and sleep records. Refresh at local midnight so a new day starts cleanly while history remains available in reports.
+const openedOn=dateKey(new Date());
+function refreshAtNewDay(){if(dateKey(new Date())!==openedOn)location.reload()}
+setInterval(refreshAtNewDay,15000);
+document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshAtNewDay()});
+// Service worker registration is omitted because this source bundle does not include sw.js.
+
+// V11 add-ons: smart tasks, focus timer, portable backup, AI adapter and self-checks.
+(function(){
+ const byId=id=>document.getElementById(id);
+ const safeText=(node,value)=>{if(node)node.textContent=String(value??'')};
+ const uid=()=>Date.now().toString(36)+'-'+Math.random().toString(36).slice(2,8);
+ function taskItems(){if(!Array.isArray(data.smartTasks))data.smartTasks=[];return data.smartTasks}
+ function renderSmartTasks(){
+  const host=byId('smartTaskList'),empty=byId('smartTaskEmpty');if(!host)return;
+  const filter=byId('smartTaskFilter')?.value||'all';
+  const items=taskItems().filter(t=>filter==='all'||(filter==='done'?t.done:!t.done));
+  host.replaceChildren();if(empty)empty.style.display=items.length?'none':'block';
+  items.forEach(task=>{
+   const row=document.createElement('div');row.className='smart-task'+(task.done?' completed':'');
+   const check=document.createElement('input');check.type='checkbox';check.checked=!!task.done;check.setAttribute('aria-label','Mark task complete');check.onchange=()=>{task.done=check.checked;task.completedAt=task.done?Date.now():null;save();renderSmartTasks()};
+   const main=document.createElement('div');main.className='smart-task-main';
+   const title=document.createElement('div');title.className='smart-task-title';title.style.fontWeight='700';title.textContent=task.title;
+   const meta=document.createElement('div');meta.className='small';meta.style.marginTop='4px';meta.textContent=[task.priority||'Medium',task.due?'Due '+task.due:'No due date'].join(' · ');
+   const badge=document.createElement('span');badge.className='priority '+String(task.priority||'Medium').toLowerCase();badge.textContent=task.priority||'Medium';title.append(' ',badge);
+   main.append(title,meta);
+   const del=document.createElement('button');del.className='btn danger';del.textContent='Delete';del.style.margin='0';del.onclick=()=>{if(confirm('Delete this task?')){data.smartTasks=taskItems().filter(t=>t.id!==task.id);save();renderSmartTasks()}};
+   row.append(check,main,del);host.append(row);
+  });
+ }
+ byId('smartTaskForm')?.addEventListener('submit',e=>{
+  e.preventDefault();const title=byId('smartTaskTitle').value.trim();if(!title)return;
+  taskItems().unshift({id:uid(),title,priority:byId('smartTaskPriority').value,due:byId('smartTaskDue').value||'',done:false,createdAt:Date.now()});
+  save();byId('smartTaskTitle').value='';byId('smartTaskDue').value='';renderSmartTasks();byId('smartTaskTitle').focus();
+ });
+ byId('smartTaskFilter')?.addEventListener('change',renderSmartTasks);renderSmartTasks();
+
+ let focusInterval=null,focusDuration=25*60,focusEndAt=null,focusRemaining=focusDuration,focusPaused=true;
+ function fmtFocus(sec){sec=Math.max(0,Math.ceil(sec));return String(Math.floor(sec/60)).padStart(2,'0')+':'+String(sec%60).padStart(2,'0')}
+ function renderFocus(){
+  safeText(byId('focusTimerDisplay'),fmtFocus(focusPaused?focusRemaining:Math.max(0,(focusEndAt-Date.now())/1000)));
+  safeText(byId('focusSessionsCount'),data.focusSessions||0);
+  if(byId('focusStart')){byId('focusStart').disabled=!focusPaused;byId('focusPause').disabled=focusPaused}
+  if(!focusPaused&&focusEndAt<=Date.now()){
+   clearInterval(focusInterval);focusInterval=null;focusPaused=true;focusRemaining=0;data.focusSessions=(Number(data.focusSessions)||0)+1;save();
+   safeText(byId('focusTimerStatus'),'Session complete! Take a short break, stretch, and hydrate.');safeText(byId('focusSessionsCount'),data.focusSessions);
+   
+   byId('focusStart').disabled=false;byId('focusPause').disabled=true;return;
+  }
+ }
+ function chooseFocus(minutes){clearInterval(focusInterval);focusInterval=null;focusDuration=minutes*60;focusRemaining=focusDuration;focusEndAt=null;focusPaused=true;safeText(byId('focusTimerStatus'),minutes===5?'Break preset selected.':'Focus preset selected.');renderFocus()}
+ document.querySelectorAll('[data-focus-minutes]').forEach(b=>b.addEventListener('click',()=>chooseFocus(Number(b.dataset.focusMinutes)||25)));
+ byId('focusStart')?.addEventListener('click',()=>{if(!focusPaused)return;focusPaused=false;focusEndAt=Date.now()+focusRemaining*1000;safeText(byId('focusTimerStatus'),'Focus session running. Keep one task in front of you.');clearInterval(focusInterval);focusInterval=setInterval(renderFocus,250);renderFocus()});
+ byId('focusPause')?.addEventListener('click',()=>{if(focusPaused)return;focusRemaining=Math.max(0,(focusEndAt-Date.now())/1000);focusPaused=true;clearInterval(focusInterval);focusInterval=null;safeText(byId('focusTimerStatus'),'Paused. Resume when you are ready.');renderFocus()});
+ byId('focusReset')?.addEventListener('click',()=>{clearInterval(focusInterval);focusInterval=null;focusPaused=true;focusRemaining=focusDuration;focusEndAt=null;safeText(byId('focusTimerStatus'),'Timer reset.');renderFocus()});
+ renderFocus();
+
+ function downloadBlob(blob,name){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(url),1000)}
+ byId('exportBackup')?.addEventListener('click',()=>{try{const backup={app:'Robin Life OS',version:'11.0',exportedAt:new Date().toISOString(),data};downloadBlob(new Blob([JSON.stringify(backup,null,2)],{type:'application/json'}),'robin-life-os-backup-'+new Date().toISOString().slice(0,10)+'.json');safeText(byId('backupStatus'),'Backup exported. Keep the JSON file somewhere safe.')}catch(err){safeText(byId('backupStatus'),'Export failed: '+err.message)}});
+ byId('importBackupFile')?.addEventListener('change',async e=>{
+  const file=e.target.files?.[0];if(!file)return;
+  try{if(file.size>5*1024*1024)throw new Error('Backup file is larger than 5 MB.');
+   const parsed=JSON.parse(await file.text());const incoming=parsed&&parsed.data&&typeof parsed.data==='object'?parsed.data:parsed;
+   if(!incoming||typeof incoming!=='object'||Array.isArray(incoming))throw new Error('This does not look like a Robin Life OS JSON backup.');
+   if(!confirm('Importing replaces all current saved app data. Continue?'))return;
+   data=incoming;save();safeText(byId('backupStatus'),'Backup imported. Reloading to refresh all views…');setTimeout(()=>location.reload(),500);
+  }catch(err){safeText(byId('backupStatus'),'Import failed: '+err.message)}finally{e.target.value=''}
+ });
+ byId('clearAllData')?.addEventListener('click',()=>{if(!confirm('This permanently clears this app’s local saved data in this browser. Export a backup first if needed. Continue?'))return;localStorage.removeItem(storeKey);location.reload()});
+
+ function aiLocalReply(prompt){
+  const q=prompt.toLowerCase(),openTasks=taskItems().filter(t=>!t.done),doneTasks=taskItems().filter(t=>t.done);
+  const bangla=/[\u0980-\u09FF]/.test(prompt),hello=/^(hi|hello|hey|assalamu|আসসালামু|হাই|হ্যালো|সালাম)/i.test(q.trim());
+  const tasksByPriority=[...openTasks].sort((a,b)=>({High:0,Medium:1,Low:2}[a.priority]??1)-({High:0,Medium:1,Low:2}[b.priority]??1));
+  const stats='তোমার এখন '+openTasks.length+'টি অসমাপ্ত task এবং '+doneTasks.length+'টি completed task আছে।';
+  if(hello)return bangla?'হাই Robin! 👋 আমি তোমার Life OS assistant। পড়াশোনার রুটিন, task priority, focus plan, fitness habit বা daily review নিয়ে সাহায্য করতে পারি। আজকের সবচেয়ে গুরুত্বপূর্ণ লক্ষ্যটা কী?':'Hi Robin! 👋 I’m your Life OS assistant. I can help plan study sessions, prioritise tasks, build focus routines, or review your progress. What matters most today?';
+  if(/help|কি করতে|what can you|capabilit|কীভাবে সাহায্য|সাহায্য করতে/.test(q))return 'আমি যা করতে পারি:\n• Study session ভাগ করে পরিকল্পনা\n• Task priority ও first step সাজানো\n• Focus/Pomodoro routine\n• Daily/weekly review\n• Fitness, sleep ও water habit-এর সাধারণ পরিকল্পনা\n\nতোমার লক্ষ্য, হাতে থাকা সময়, আর deadline লিখলে আমি আরও নির্দিষ্ট plan সাজাব।';
+  if(/plan|schedule|study|routine|exam|পড়|পড়|রুটিন|পরীক্ষা|স্টাডি|পড়াশোনা|পড়াশোনা/.test(q)){
+   const plan=tasksByPriority.length?'\n\nপ্রথমে এই task-টা ধরো: “'+tasksByPriority[0].title+'” ('+tasksByPriority[0].priority+' priority)।':'\n\nশুরু করার আগে Smart Tasks-এ একটি নির্দিষ্ট task যোগ করো।';
+   return '📚 তোমার study plan\n1. 5 মিনিট: আজ কী শেষ করবে লিখে নাও।\n2. 25 মিনিট: সবচেয়ে কঠিন topic পড়ো; ফোন দূরে রাখো।\n3. 5 মিনিট: বিরতি নাও, পানি খাও।\n4. 25 মিনিট: বই বন্ধ করে নিজেকে প্রশ্ন করো বা practice করো।\n5. 5 মিনিট: কী শিখলে এবং পরের step লিখে রাখো.'+plan+'\n\nকত ঘণ্টা সময় আছে এবং কোন subject পড়বে জানালে সময় অনুযায়ী ভাগ করে দেব।';
+  }
+  if(/task|priorit|todo|to-do|deadline|কাজ|টাস্ক|প্রায়োরিটি|ডেডলাইন/.test(q))return openTasks.length?'✅ '+stats+'\n\nআজকের প্রস্তাবিত order:\n'+tasksByPriority.slice(0,5).map((t,i)=>(i+1)+'. ['+t.priority+'] '+t.title+(t.due?' — due '+t.due:'')).join('\n')+'\n\nএখন প্রথম task-এর শুধু 10 মিনিটের first step করো। বড় কাজ হলে ছোট ছোট অংশে ভাগ করো।':'তোমার কোনো open task নেই—দারুণ! আজকের পরের লক্ষ্যটা Smart Tasks-এ যোগ করো। কাজের নাম যেন স্পষ্ট হয়, যেমন “Chapter 2-এর 10টি প্রশ্ন practice”।';
+  if(/motivat|procrast|focus|distract|মন বসে|মনোযোগ|আলসেমি|ইচ্ছা করছে না/.test(q))return '🎯 ছোট করে শুরু করো:\n1. কাজের জন্য একটি নির্দিষ্ট ফলাফল বেছে নাও।\n2. 15 মিনিটের Focus timer চালু করো।\n3. শুধু প্রথম ছোট step শেষ করো—পুরো কাজ একসাথে ভাবতে হবে না।\n4. শেষে 2 মিনিটে অগ্রগতি লিখে রাখো।\n\nMotivation আসার অপেক্ষা না করে সহজ একটি action দিয়ে শুরু করাই ভালো।';
+  if(/water|sleep|health|workout|fitness|ব্যায়াম|ব্যায়াম|ঘুম|পানি|স্বাস্থ্য/.test(q))return '🌿 Sustainable routine:\n• প্রতিদিন কাছাকাছি সময়ে ঘুমাতে যাওয়ার চেষ্টা করো।\n• দিনের মধ্যে নিয়মিত পানি পান করো এবং নিজের প্রয়োজন অনুযায়ী চল।\n• ব্যায়াম করলে নিজের সক্ষমতা অনুযায়ী করো, বিশ্রামও রাখো।\n• পড়াশোনার মাঝে ছোট বিরতি নাও।\n\nএটি সাধারণ wellbeing guidance—অস্বস্তি বা অসুস্থতা হলে থামো এবং প্রয়োজন হলে বিশ্বস্ত বড় কেউ/স্বাস্থ্যপেশাদারের পরামর্শ নাও।';
+  if(/review|progress|summary|কেমন কর|অগ্রগতি|রিপোর্ট/.test(q))return '📊 তোমার Life OS snapshot\n• Open tasks: '+openTasks.length+'\n• Completed tasks: '+doneTasks.length+'\n• Focus sessions: '+(Number(data.focusSessions)||0)+'\n\nআজকের review-এর জন্য 3টি প্রশ্ন:\n1. আজ কী ভালো হয়েছে?\n2. কোথায় সময় নষ্ট হয়েছে?\n3. আগামীকাল সবচেয়ে গুরুত্বপূর্ণ একটি কাজ কী?\n\n'+(tasksByPriority.length?'আগামীকালের প্রথম কাজ: '+tasksByPriority[0].title:'আগামীকালের জন্য একটি task যোগ করো।');
+  if(/bangla|বাংলা|english|ইংরেজি/.test(q))return 'অবশ্যই—তুমি বাংলায় বা Banglish-এ লিখতে পারো। তোমার লক্ষ্য, সময়সীমা, এবং কী ধরনের সাহায্য দরকার (study/task/focus/review) একসাথে বলো।';
+  return 'আমি তোমার Life OS-এর task ও focus তথ্য ধরে ব্যবহারিক পরামর্শ দিতে পারি।\n\nভালো ফল পেতে এভাবে লিখো:\n• “আজ 2 ঘণ্টায় কীভাবে পড়ব?”\n• “আমার task-গুলো priority অনুযায়ী সাজাও”\n• “মনোযোগ ধরে রাখার 1 ঘণ্টার plan দাও”\n• “আমার daily progress review করো”\n\n'+stats+'\n\nনোট: backend configure না করা থাকলে এটি উন্নত local assistant—পূর্ণ generative AI নয়। পূর্ণ AI response-এর জন্য নিরাপদে hosted backend connect করতে হবে।';
+ }
+ const aiConversation=[];
+ function renderAssistantText(bubble,text){
+  // Small safe Markdown renderer: code and text are inserted as text nodes, never as raw HTML.
+  const lines=String(text||'').replace(/\r/g,'').split('\n');let i=0,paragraph=[];
+  const flushParagraph=()=>{if(!paragraph.length)return;const p=document.createElement('p');p.textContent=paragraph.join(' ');bubble.append(p);paragraph=[];};
+  while(i<lines.length){const line=lines[i];
+   if(/^```/.test(line.trim())){flushParagraph();const lang=line.trim().slice(3).trim();i++;const codeLines=[];while(i<lines.length&&!/^```/.test(lines[i].trim()))codeLines.push(lines[i++]);if(i<lines.length)i++;const wrap=document.createElement('div');if(lang){const label=document.createElement('div');label.className='ai-code-label';label.textContent=lang;wrap.append(label)}const pre=document.createElement('pre'),code=document.createElement('code');code.textContent=codeLines.join('\n');pre.append(code);wrap.append(pre);const copy=document.createElement('button');copy.type='button';copy.className='btn copy-code';copy.textContent='Copy code';copy.addEventListener('click',async()=>{try{await navigator.clipboard.writeText(code.textContent);copy.textContent='Copied!';setTimeout(()=>copy.textContent='Copy code',1200)}catch(_){copy.textContent='Select code to copy'}});wrap.append(copy);bubble.append(wrap);continue;}
+   if(/^\s*([-*]|\d+\.)\s+/.test(line)){flushParagraph();const ordered=/^\s*\d+\./.test(line);const list=document.createElement(ordered?'ol':'ul');while(i<lines.length&&/^\s*([-*]|\d+\.)\s+/.test(lines[i])){const li=document.createElement('li');li.textContent=lines[i].replace(/^\s*(?:[-*]|\d+\.)\s+/,'');list.append(li);i++;}bubble.append(list);continue;}
+   if(!line.trim()){flushParagraph();i++;continue;}paragraph.push(line.trim());i++;
+  }flushParagraph();
+ }
+ function addBubble(text,isUser){const log=byId('aiChatLog'),bubble=document.createElement('div');bubble.className='ai-bubble'+(isUser?' user':'');if(isUser)bubble.textContent=text;else renderAssistantText(bubble,text);log.append(bubble);log.scrollTop=log.scrollHeight;return bubble;}
+ byId('clearAiChat')?.addEventListener('click',()=>{aiConversation.length=0;const log=byId('aiChatLog');log.replaceChildren();const hello=document.createElement('div');hello.className='ai-bubble';hello.textContent='Chat cleared. Ask me anything—general questions, coding, debugging, maths, writing, translation, or study help.';log.append(hello)});
+ byId('saveAiBackend')?.addEventListener('click',()=>{const url=byId('aiBackendUrl').value.trim();if(url){try{const u=new URL(url);if(!['https:','http:'].includes(u.protocol))throw new Error();if(location.protocol==='https:'&&u.protocol!=='https:')throw new Error();localStorage.setItem('robin-life-os-ai-backend',u.href.replace(/\/$/,''));safeText(byId('aiBackendStatus'),'Backend URL saved in this browser. Test it by asking a question.');safeText(byId('aiModeBadge'),'AI BACKEND READY')}catch(_){safeText(byId('aiBackendStatus'),'Enter a valid HTTPS backend URL (HTTPS is required on the live website).')}}else{localStorage.removeItem('robin-life-os-ai-backend');safeText(byId('aiBackendStatus'),'No backend configured. Local fallback is active.');safeText(byId('aiModeBadge'),'LOCAL MODE')}});
+ const savedBackend=localStorage.getItem('robin-life-os-ai-backend')||'';if(byId('aiBackendUrl'))byId('aiBackendUrl').value=savedBackend;
+ if(savedBackend){safeText(byId('aiModeBadge'),'CHECK CONNECTION');safeText(byId('aiBackendStatus'),'Backend URL saved. Press “Test connection” to verify that the server and API key are configured.')}
+ byId('testAiBackend')?.addEventListener('click',async()=>{
+  const btn=byId('testAiBackend');let url=(byId('aiBackendUrl')?.value||localStorage.getItem('robin-life-os-ai-backend')||'').trim();
+  if(!url){safeText(byId('aiBackendStatus'),'Enter your deployed backend URL, save it, then test the connection.');safeText(byId('aiModeBadge'),'LOCAL MODE');return;}
+  try{const u=new URL(url);if(!['https:','http:'].includes(u.protocol)||(location.protocol==='https:'&&u.protocol!=='https:'))throw new Error('Use a valid HTTPS backend URL.');url=u.href.replace(/\/$/,'');localStorage.setItem('robin-life-os-ai-backend',url);if(btn){btn.disabled=true;btn.textContent='Testing…'}safeText(byId('aiBackendStatus'),'Checking backend health…');
+   const controller=new AbortController();const timer=setTimeout(()=>controller.abort(),12000);let response;try{response=await fetch(url+'/health',{method:'GET',cache:'no-store',signal:controller.signal})}finally{clearTimeout(timer)}
+   const health=await response.json().catch(()=>({}));if(!response.ok||!health.ok)throw new Error(health.error||('Health check HTTP '+response.status));
+   if(!health.configured){safeText(byId('aiModeBadge'),'KEY MISSING');safeText(byId('aiBackendStatus'),'Server is online, but OPENAI_API_KEY is missing. Add it in the hosting provider Environment settings and redeploy.');return;}
+   safeText(byId('aiModeBadge'),'BACKEND ONLINE');safeText(byId('aiBackendStatus'),'✅ Backend online and API key is configured ('+(health.model||'model')+'). Send a question to test an actual AI response.');
+  }catch(err){safeText(byId('aiModeBadge'),'NOT CONNECTED');safeText(byId('aiBackendStatus'),'Connection test failed: '+(err.name==='AbortError'?'server timed out':err.message)+'. Check the URL, deployment logs, HTTPS and ALLOWED_ORIGIN.')}finally{if(btn){btn.disabled=false;btn.textContent='Test connection'}}
+ });
+ byId('aiChatForm')?.addEventListener('submit',async e=>{
+  e.preventDefault();const prompt=byId('aiPrompt').value.trim();if(!prompt)return;
+  addBubble(prompt,true);aiConversation.push({role:'user',content:prompt});byId('aiPrompt').value='';const send=byId('aiChatForm').querySelector('button[type="submit"],button:not([type])');if(send){send.disabled=true;send.textContent='Thinking…'}
+  let reply='';const backend=localStorage.getItem('robin-life-os-ai-backend');
+  if(backend){
+   try{const response=await fetch(backend+'/api/ai',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({message:prompt,history:aiConversation.slice(-12,-1),context:{openTasks:taskItems().filter(t=>!t.done).slice(0,8).map(t=>({title:t.title,priority:t.priority})),completedTasks:taskItems().filter(t=>t.done).length,focusSessions:Number(data.focusSessions)||0}})});
+    const result=await response.json().catch(()=>({}));if(!response.ok)throw new Error(result.error||('HTTP '+response.status));reply=String(result.reply||result.output||'The AI backend returned no reply.').slice(0,12000);safeText(byId('aiModeBadge'),'AI CONNECTED');safeText(byId('aiBackendStatus'),'Connected: AI response received successfully.');
+   }catch(err){reply='AI backend connection failed: '+err.message+'\n\nCheck the saved backend URL and server status. The local helper is available below, but it cannot answer every general question or write/diagnose arbitrary code.\n\n'+aiLocalReply(prompt);safeText(byId('aiModeBadge'),'LOCAL FALLBACK');safeText(byId('aiBackendStatus'),'Could not get an AI response. Check the backend URL and /health endpoint.')}
+  }else{reply=aiLocalReply(prompt);safeText(byId('aiBackendStatus'),'Local helper mode: connect your hosted AI backend for general-purpose answers and code help.')}
+  aiConversation.push({role:'assistant',content:reply});if(aiConversation.length>16)aiConversation.splice(0,aiConversation.length-16);addBubble(reply,false);if(send){send.disabled=false;send.textContent='Send message'}
+ });
+ // One-tap translation and explanation actions for English/Bangla text.
+ document.querySelectorAll('[data-ai-action]').forEach(button=>button.addEventListener('click',()=>{
+  const field=byId('aiPrompt');const original=(field?.value||'').trim();
+  if(!original){if(field){field.focus();field.placeholder='প্রথমে এখানে English বা বাংলা text লিখো/paste করো, তারপর action বেছে নাও।'}return;}
+  const tasks={
+   'to-en':'Translate the following text into natural, correct English. Preserve the original meaning and tone. Return the translation first; then add a short Bangla note only if an idiom or phrase needs explanation. Do not omit important details.',
+   'to-bn':'Translate the following text into natural, correct Bangla (বাংলা). Preserve the original meaning and tone. Use clear, everyday Bangla; keep names, numbers, and technical terms accurate. Return the translation first.',
+   'explain-bn':'Explain the meaning of the following text in simple, clear Bangla. If it is English, explain the full meaning in Bangla and translate important phrases. If it is already Bangla, explain it more simply. Give a short example if useful. Do not merely repeat the text.',
+   'explain-en':'Explain the meaning of the following text in clear, simple English. If it is Bangla, translate its meaning into English first and explain any idioms or difficult phrases. Give a short example if useful.',
+   'grammar':'Correct the grammar and spelling of the following text while preserving its meaning. Show the corrected version first, then briefly explain the important changes in Bangla. If it is already correct, say so.'
+  };
+  field.value=tasks[button.dataset.aiAction]+'\n\nTEXT:\n'+original;
+  byId('aiChatForm')?.requestSubmit();
+ }));
+ // Lightweight static self-checks: not a substitute for browser/device QA.
+ byId('runSystemChecks')?.addEventListener('click',()=>{
+  const ids=['smartTaskForm','focusStart','aiChatForm','exportBackup','importBackupFile','dashboard','routine','study','skills','fitness','recovery','monthly'];
+  const missing=ids.filter(id=>!document.getElementById(id));const checks=[
+   'Local storage: '+(function(){try{const k='__robin_test';localStorage.setItem(k,'1');localStorage.removeItem(k);return 'available'}catch(_){return 'blocked'}})(),
+   'Notification prompts: disabled by design',
+   'Secure context: '+(window.isSecureContext?'yes':'no'),
+   'Missing key UI elements: '+(missing.length?missing.join(', '):'none')
+  ];safeText(byId('systemChecks'),checks.join(' · '));if(missing.length)console.warn('Robin Life OS missing UI elements',missing);
+ });
+ // Guard against unavailable localStorage in privacy-restricted browser contexts.
+ if(byId('systemChecks'))safeText(byId('systemChecks'),'Run the check to inspect storage, notifications, secure-context support and key UI elements.');
+})();
+
+</script>
+<script>
+/* V11.6 Smart Find + adaptive next-step card. Uses existing app data; does not replace any feature. */
+(()=>{
+ const $=id=>document.getElementById(id), input=$('smartFindInput'), results=$('smartFindResults');
+ const pages=[
+  ['dashboard','Dashboard','home overview progress today'],['routine','Routine','daily schedule plan checklist'],['study','Study','study subjects timetable timer stopwatch exam'],['skills','Skills','after effects premiere creative editing learning'],['fitness','Fitness','workout exercise strength movement'],['recovery','Water & Sleep','water hydration sleep recovery health'],['monthly','Monthly report','monthly history calendar analytics progress'],['tasks','Smart Tasks','task todo deadline priority'],['focus','Focus','focus pomodoro timer concentration'],['assistant','AI Assistant','ai ask anything coding translate writing explain'],['settings','Backup & Settings','backup restore export import settings']
+ ];
+ function go(tab){const b=document.querySelector('nav [data-tab="'+tab+'"]');if(b){b.click();window.scrollTo({top:0,behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}}
+ function resultButton(title,meta,action){const b=document.createElement('button');b.type='button';b.className='smart-result';const a=document.createElement('span');a.textContent=title;const m=document.createElement('small');m.textContent=meta;b.append(a,m);b.addEventListener('click',action);return b;}
+ function renderSearch(){if(!input||!results)return;const q=input.value.trim().toLowerCase();results.replaceChildren();if(!q){const hint=document.createElement('div');hint.className='small';hint.textContent='Type to search all sections and your saved tasks. Tip: press Ctrl/⌘ + K to search.';results.append(hint);return;}
+  const matchedPages=pages.filter(p=>(p[1]+' '+p[2]).toLowerCase().includes(q)).slice(0,5);
+  matchedPages.forEach(p=>results.append(resultButton(p[1],'Open section →',()=>go(p[0]))));
+  const tasks=Array.isArray(data.smartTasks)?data.smartTasks:[];const matchedTasks=tasks.filter(t=>String(t.title||'').toLowerCase().includes(q)).slice(0,5);
+  matchedTasks.forEach(t=>results.append(resultButton(t.title||'Untitled task',(t.done?'Completed':'Open')+' · '+(t.priority||'Medium'),()=>{go('tasks');setTimeout(()=>{const el=$('smartTaskList');if(el){const nodes=[...el.querySelectorAll('*')].filter(n=>n.children.length===0&&n.textContent.trim()===(t.title||'Untitled task'));const target=nodes[0]?.closest('.smart-task,.task-item,.card')||nodes[0];if(target){target.scrollIntoView({behavior:'smooth',block:'center'});target.classList.add('smart-search-highlight');setTimeout(()=>target.classList.remove('smart-search-highlight'),1800)}}},180)})));
+  if(!matchedPages.length&&!matchedTasks.length){const empty=document.createElement('div');empty.className='small';empty.textContent='No match found. Try “study”, “routine”, “focus”, “sleep”, “AI”, or part of a task name.';results.append(empty)}
+ }
+ input?.addEventListener('input',renderSearch);
+ document.addEventListener('keydown',e=>{if((e.ctrlKey||e.metaKey)&&e.key.toLowerCase()==='k'){e.preventDefault();go('dashboard');setTimeout(()=>input?.focus(),80)}if(e.key==='/'&&!/input|textarea|select/i.test(document.activeElement?.tagName||'')){e.preventDefault();go('dashboard');setTimeout(()=>input?.focus(),80)}if(e.key==='Escape'&&document.activeElement===input){input.value='';renderSearch();input.blur()}});
+ const title=$('smartNudgeTitle'),body=$('smartNudgeText'),goBtn=$('smartNudgeGo');let nudgeTarget='focus';
+ function refreshNudge(){if(!title||!body||!goBtn)return;const pct=Number.parseInt(($('heroPct')?.textContent||'0').replace('%',''),10)||0;const tasks=Array.isArray(data.smartTasks)?data.smartTasks:[];const open=tasks.filter(t=>!t.done);const high=open.find(t=>t.priority==='High');
+  if(pct>=100){title.textContent='Excellent — routine complete!';body.textContent='You finished every item in today’s routine. Review what worked, then take a proper break or prepare one small task for tomorrow.';nudgeTarget='monthly';goBtn.textContent='Review progress →';}
+  else if(high){title.textContent='Start with your highest-priority task';body.textContent='Next up: “'+String(high.title||'Untitled task')+'”. Give it 10 focused minutes first; you can refine the plan after starting.';nudgeTarget='tasks';goBtn.textContent='Open my tasks →';}
+  else if(pct<35){title.textContent='Build momentum with one small win';body.textContent='Your routine is at '+pct+'%. Open today’s checklist and complete the easiest useful item, or start a short focus session.';nudgeTarget='routine';goBtn.textContent='Open today’s routine →';}
+  else {title.textContent='Keep the momentum going';body.textContent='Your routine is at '+pct+'%. A short, distraction-free focus session can help you finish the next important item.';nudgeTarget='focus';goBtn.textContent='Start a focus session →';}
+ }
+ goBtn?.addEventListener('click',()=>go(nudgeTarget));
+ const pctEl=$('heroPct');if(pctEl&&'MutationObserver'in window)new MutationObserver(refreshNudge).observe(pctEl,{childList:true,characterData:true,subtree:true});
+ const taskList=$('smartTaskList');if(taskList&&'MutationObserver'in window)new MutationObserver(refreshNudge).observe(taskList,{childList:true,subtree:true});
+ document.querySelectorAll('[data-goto]').forEach(b=>b.addEventListener('click',()=>setTimeout(refreshNudge,120)));
+ refreshNudge();
+})();
+</script>
+<style>.smart-search-highlight{outline:3px solid #c5f36a!important;outline-offset:3px!important;transition:outline-color .2s}</style>
+
+<audio id="studyAlertSound" src="./study-notification.mp3" preload="auto"></audio>
+
+<style>
+#screenWakeStatus{position:fixed;right:12px;bottom:12px;z-index:9999;padding:7px 11px;border-radius:999px;background:rgba(20,30,45,.88);color:#fff;font:600 12px/1.2 system-ui,sans-serif;box-shadow:0 3px 14px rgba(0,0,0,.18);backdrop-filter:blur(8px);pointer-events:none;opacity:.88}
+#screenWakeStatus[data-state="on"]{background:rgba(28,112,74,.92)}
+#screenWakeStatus[data-state="off"]{background:rgba(110,75,35,.92)}
+</style>
+<div id="screenWakeStatus" data-state="pending" role="status" aria-live="polite">Screen awake: starting…</div>
+<script>
+/* Keep Robin Life OS screen awake while the app is visible, when supported. */
+(()=>{
+ const badge=document.getElementById('screenWakeStatus');
+ if(!badge)return;
+ let wakeLock=null, requesting=false, enabled=true;
+ const setStatus=(state,label)=>{badge.dataset.state=state;badge.textContent=label;};
+ async function requestWakeLock(){
+  if(!enabled||requesting||document.visibilityState!=='visible')return;
+  if(!('wakeLock' in navigator)){setStatus('off','Screen awake: not supported');return;}
+  if(wakeLock&&!wakeLock.released){setStatus('on','Screen awake: ON');return;}
+  requesting=true;
+  try{
+   wakeLock=await navigator.wakeLock.request('screen');
+   setStatus('on','Screen awake: ON');
+   wakeLock.addEventListener('release',()=>{wakeLock=null;if(enabled)setStatus('off','Screen awake: paused');});
+  }catch(error){wakeLock=null;setStatus('off','Screen awake: unavailable');}
+  finally{requesting=false;}
+ }
+ // Try on app open, then retry after the user's first interaction if the browser requires it.
+ requestWakeLock();
+ const retry=()=>{if(enabled)requestWakeLock();};
+ ['pointerdown','keydown','touchstart'].forEach(type=>document.addEventListener(type,retry,{passive:true}));
+ document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')requestWakeLock();});
+ window.addEventListener('pageshow',retry);
+})();
+</script>
+
+</body></html>

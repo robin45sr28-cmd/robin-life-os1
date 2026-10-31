@@ -1,0 +1,24 @@
+ROBIN LIFE OS V11.9 — INSTANT AI QUESTIONS
+
+নতুন কী?
+- AI Assistant-এর মধ্যে কয়েকটি Instant Question button যোগ করা হয়েছে।
+- যেকোনো button-এ একবার tap করলেই প্রশ্নটি নিজে থেকে পাঠানো হবে; আলাদা করে Send চাপতে হবে না।
+- Python, Java, Math, General Knowledge, AI explanation, Study Routine, Translation এবং Web Coding-এর উদাহরণ আছে।
+- নিজের প্রশ্নও text box-এ লিখে Send message চাপতে পারবে।
+
+গুরুত্বপূর্ণ:
+এই instant question button-গুলো প্রশ্ন পাঠানোর shortcut, এগুলো নিজে AI model নয়। পূর্ণ/সাধারণ AI উত্তর পেতে ai-backend server deploy করা, server Environment-এ OPENAI_API_KEY যোগ করা, এবং ওয়েবসাইটের AI Assistant-এ backend URL Save করে Test connection সফল করা প্রয়োজন।
+
+দ্রুত সেটআপ:
+1. ZIP extract করে সব ফাইল GitHub repository-তে upload/commit করো।
+2. Render-এ Blueprint হিসেবে render.yaml deploy করো (অথবা ai-backend-কে Web Service হিসেবে deploy করো)।
+3. Render Environment-এ OPENAI_API_KEY secret যোগ করো; key public repository বা browser-এ রেখো না।
+4. Service URL-এর /health পেজে {"ok":true,"configured":true} দেখো।
+5. লাইভ ওয়েবসাইট → AI Assistant → Backend URL-এ service root URL দাও → Save backend URL → Test connection।
+6. তারপর Instant Question button tap করে উত্তর পরীক্ষা করো।
+
+সতর্কতা: AI-এর উত্তর সবসময় ১০০% সঠিক নাও হতে পারে। API usage-এ খরচ হতে পারে।
+
+
+V12.0 — Translate & Explain
+AI Assistant-এ text box-এ English বা বাংলা লেখা paste করো। এরপর Translate to English, বাংলায় অনুবাদ, বাংলায় বুঝিয়ে বলো, Explain in English, অথবা Fix grammar & explain বেছে নাও। লেখা স্বয়ংক্রিয়ভাবে AI-তে পাঠানো হবে। পূর্ণ উত্তর পেতে backend অনলাইনে connected থাকতে হবে।

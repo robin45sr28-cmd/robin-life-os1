@@ -1,0 +1,23 @@
+ROBIN LIFE OS — AI BACKEND চালু করার সহজ গাইড
+
+গুরুত্বপূর্ণ: ZIP-এর মধ্যে backend কোড আছে, কিন্তু তোমার হয়ে ইন্টারনেটে server deploy করা বা API key তৈরি করা যায় না। তাই hosting ও নিজের API key সেট না করা পর্যন্ত সাধারণ প্রশ্নের পূর্ণ AI উত্তর আসবে না। AI কখনোই সব উত্তরে ১০০% সঠিক হওয়ার নিশ্চয়তা দিতে পারে না।
+
+১) ZIP Extract করো। ai-backend ফোল্ডার এবং render.yaml-সহ সব ফাইল GitHub repository-র root-এ আপলোড/commit করো। ZIP ফাইলটিকে নিজে upload না করে ZIP-এর ভেতরের ফাইলগুলো upload করতে হবে।
+
+২) Render Dashboard-এ গিয়ে New + → Blueprint বেছে একই GitHub repository connect করো। render.yaml থেকে service তৈরি হবে। বিকল্পভাবে Web Service তৈরি করে Root Directory = ai-backend, Build Command = npm install, Start Command = npm start, Health Check Path = /health দাও।
+
+৩) Render service → Environment-এ OPENAI_API_KEY নামে Secret যোগ করো। API key কেবল server Environment-এ থাকবে—GitHub, index.html বা ChatGPT-তে নয়। OPENAI_MODEL ডিফল্ট gpt-4.1-mini রাখা আছে। API ব্যবহার ও hosting-এ খরচ হতে পারে; আগে usage/billing সীমা যাচাই করো।
+
+৪) ALLOWED_ORIGIN মান রাখো: https://md4437555-crearte.github.io (এখানে /robin-life-os/ path যোগ করবে না)। Deploy করো।
+
+৫) Render-এর service URL-এর শেষে /health খোলো। JSON-এ ok:true এবং configured:true থাকা চাই। configured:false হলে Environment-এ key ঠিকমতো যোগ করে redeploy করো।
+
+৬) তোমার ওয়েবসাইট খুলে AI Assistant-এ Backend URL field-এ শুধু service root URL দাও, যেমন https://your-service.onrender.com । Save backend URL চাপো, তারপর Test connection চাপো। Test সফল হলে প্রশ্ন পাঠাও।
+
+সমস্যা হলে:
+- 403: ALLOWED_ORIGIN সঠিক কি না দেখো।
+- 502: API account/billing, API key ও model access দেখো।
+- Connection failed: Render service URL ও deploy status দেখো।
+- প্রথম request ধীর হতে পারে, কারণ free hosting idle হলে sleep করতে পারে।
+
+API key কাউকে পাঠাবে না। AI উত্তর ভুলও হতে পারে—গুরুত্বপূর্ণ তথ্য অন্য নির্ভরযোগ্য উৎসে যাচাই করো।
